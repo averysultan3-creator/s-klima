@@ -1646,6 +1646,11 @@ input[type="number"]:focus,
     margin: 0 auto;
   }
 
+  .ac-closeup-card {
+    right: 14px;
+    width: min(230px, 32%);
+  }
+
   .price-panel {
     position: static;
   }

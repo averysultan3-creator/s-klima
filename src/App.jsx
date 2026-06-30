@@ -34,6 +34,11 @@ import {
 
 const phone = "+48 513 999 450";
 const email = "kontakt@s-klimawarszawa.pl";
+const assetPath = (path) => {
+  if (!path || /^(https?:|mailto:|tel:|data:|blob:)/.test(path)) return path;
+  const base = import.meta.env.BASE_URL || "/";
+  return `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+};
 
 const products = [
   {
@@ -291,11 +296,16 @@ function SmartImage({ src, alt, className = "", fallback = "/climate-room.png" }
   const [currentSrc, setCurrentSrc] = useState(src);
   const [hidden, setHidden] = useState(false);
 
+  useEffect(() => {
+    setCurrentSrc(src);
+    setHidden(false);
+  }, [src]);
+
   if (hidden) return null;
 
   return (
     <img
-      src={currentSrc}
+      src={assetPath(currentSrc)}
       alt={alt}
       className={className}
       onError={() => {
