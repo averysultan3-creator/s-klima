@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="LG DualCool Compact 2.5 kW">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff2f6"/>
+      <stop offset="1" stop-color="#e8fff6"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0a493b" flood-opacity=".15"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="34" fill="url(#bg)"/>
+  <circle cx="492" cy="92" r="74" fill="#d91f5c" opacity=".08"/>
+  <g filter="url(#shadow)">
+    <rect x="98" y="96" width="444" height="122" rx="30" fill="#fff"/>
+    <path d="M132 136h376" stroke="#edf5f3" stroke-width="16" stroke-linecap="round"/>
+    <path d="M144 178h352" stroke="#0c2e26" stroke-opacity=".2" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="492" cy="118" r="12" fill="#d91f5c" opacity=".28"/>
+  </g>
+  <path d="M174 254c66-30 128-30 192 0" fill="none" stroke="#36b8f2" stroke-width="9" stroke-linecap="round" opacity=".26"/>
+  <text x="88" y="288" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900" fill="#0c2e26">LG</text>
+  <text x="88" y="319" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#05724c">DualCool Compact 2.5 kW</text>
+</svg>
