@@ -10,43 +10,36 @@ import { Fan, ThermometerSun, Check } from "lucide-react";
 import { assetPath } from "./utils";
 
 export default function OriginalHeroRoom() {
-  const heroRef = useRef(null);
+  const containerRef = useRef(null);
   const [temp, setTemp] = useState(29);
-  const scrollYProgress = useMotionValue(0);
+  const progressMotion = useMotionValue(0);
 
+  // Wheel interaction: WHEN CURSOR IS OVER ANIMATION -> prevent page scroll & animate room!
   useEffect(() => {
-    let frame = 0;
+    const el = containerRef.current;
+    if (!el) return;
 
-    const updateProgress = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Calculate how far the user has scrolled relative to the hero section
-      const total = rect.height + windowHeight;
-      const current = windowHeight - rect.top;
-      const progress = Math.min(1, Math.max(0, current / (total * 0.85)));
-      scrollYProgress.set(progress);
+    const handleWheel = (e) => {
+      // Prevent default page scroll while hovering over the room
+      e.preventDefault();
+      e.stopPropagation();
+
+      const current = progressMotion.get();
+      // Sensitivity factor
+      const delta = e.deltaY > 0 ? 0.045 : -0.045;
+      const next = Math.min(1, Math.max(0, current + delta));
+      progressMotion.set(next);
     };
 
-    const requestUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateProgress);
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-
+    // Note: passive: false is strictly required to allow e.preventDefault()
+    el.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
+      el.removeEventListener("wheel", handleWheel);
     };
-  }, [scrollYProgress]);
+  }, [progressMotion]);
 
   // Exact spring and transforms from the original S-Klima engine
-  const smooth = useSpring(scrollYProgress, { stiffness: 72, damping: 24, mass: 0.25 });
+  const smooth = useSpring(progressMotion, { stiffness: 72, damping: 24, mass: 0.25 });
   const cameraScale = useTransform(smooth, [0, 0.18, 0.55, 1], [1.08, 1.34, 0.92, 0.92]);
   const cameraY = useTransform(smooth, [0, 0.18, 0.55, 1], [16, -24, 0, 0]);
 
@@ -77,7 +70,11 @@ export default function OriginalHeroRoom() {
   });
 
   return (
-    <div ref={heroRef} className="hero-visual-wrap relative select-none">
+    <div
+      ref={containerRef}
+      className="hero-visual-wrap relative select-none cursor-ns-resize"
+      title="Przewiń kółkiem myszy tutaj, aby schłodzić pokój"
+    >
       <motion.div className="room-stage" style={{ scale: cameraScale, y: cameraY }}>
         {/* Stage 1: Hot Room */}
         <motion.div className="room-image-layer" style={{ opacity: hotImageOpacity }}>
