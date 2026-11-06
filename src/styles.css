@@ -24,6 +24,87 @@
   scrollbar-width: none;
 }
 
+.hero-story-compact {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: auto;
+  max-width: 210px;
+  min-height: 48px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hero-story-compact .story-step {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(220, 233, 229, 0.95);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 25px rgba(12, 46, 38, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.hero-story-compact .step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--emerald, #10a56a);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.hero-story-compact .step-text strong {
+  display: block;
+  color: var(--ink, #10231f);
+  font-size: 0.76rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.hero-story-compact .step-text small {
+  display: block;
+  color: var(--muted, #62736d);
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Position thermo card cleanly in bottom right */
+.thermo-card {
+  right: 14px !important;
+  bottom: 14px !important;
+  min-width: 170px !important;
+  padding: 8px 12px !important;
+  gap: 8px !important;
+  border-radius: 14px !important;
+  z-index: 10;
+}
+
+.thermo-card strong {
+  font-size: 1.25rem !important;
+}
+
+.thermo-icon {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+}
+
+.mercury-track {
+  height: 42px !important;
+}
+
 :root {
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
