@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Phone,
   Mail,
@@ -10,6 +10,7 @@ import {
   ArrowRight,
   ExternalLink,
   ChevronRight,
+  ChevronLeft,
   Star,
   Zap,
   Snowflake,
@@ -20,6 +21,7 @@ import {
   Menu,
   X,
   Layers,
+  Send,
 } from "lucide-react";
 import HubPage from "./HubPage";
 import RealizacjePage, { projectObjects } from "./RealizacjePage";
@@ -29,18 +31,19 @@ const PHONE = "+48 513 666 450";
 const EMAIL = "kontakt@zielonyzajac.pl";
 const GOOGLE_MAPS_URL = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
 
-const BRANDS = [
-  { name: "Gree", tag: "Lider niezawodności" },
-  { name: "Hisense", tag: "Najlepszy stosunek ceny do jakości" },
-  { name: "LG", tag: "Design i technologia Dual Inverter" },
-  { name: "Panasonic", tag: "Zaawansowane oczyszczanie nanoe™ X" },
-  { name: "Toshiba", tag: "Japońska trwałość i cicha praca" },
-  { name: "Daikin", tag: "Klasa Premium i najwyższa sprawność" },
-  { name: "Mitsubishi Electric", tag: "Maksymalny komfort bez kompromisów" },
+const BRAND_LOGOS = [
+  { name: "Gree", logo: "/brands/gree.svg" },
+  { name: "Hisense", logo: "/brands/hisense.svg" },
+  { name: "LG", logo: "/brands/lg.svg" },
+  { name: "Panasonic", logo: "/brands/panasonic.svg" },
+  { name: "Toshiba", logo: "/brands/toshiba.svg" },
+  { name: "Daikin", logo: "/brands/daikin.svg" },
+  { name: "Mitsubishi Electric", logo: "/brands/mitsubishi.svg" },
 ];
 
 const PACKAGES = [
   {
+    id: "standard",
     name: "Pakiet Standard",
     badge: "Najczęściej wybierany",
     popular: true,
@@ -59,6 +62,7 @@ const PACKAGES = [
     ],
   },
   {
+    id: "comfort",
     name: "Pakiet Comfort",
     badge: "Wysoka energooszczędność",
     popular: false,
@@ -77,6 +81,7 @@ const PACKAGES = [
     ],
   },
   {
+    id: "premium",
     name: "Pakiet Premium",
     badge: "Klasa Premium",
     popular: false,
@@ -107,7 +112,12 @@ export default function App() {
   const [currentView, setCurrentView] = useState("main"); // 'main', 'hub', 'realizacje'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roomTemp, setRoomTemp] = useState(21); // 18, 21, 24
-  const [hoveredMarqueeId, setHoveredMarqueeId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalSubject, setModalSubject] = useState("");
+  const [contactSuccess, setContactSuccess] = useState(false);
+  const [userPhoneInput, setUserPhoneInput] = useState("");
+
+  const galleryRef = useRef(null);
 
   // Listen to hash routes
   useEffect(() => {
@@ -129,6 +139,27 @@ export default function App() {
     else {
       window.location.hash = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleOpenContactModal = (subject) => {
+    setModalSubject(subject || "Zapytanie o montaż klimatyzacji");
+    setContactSuccess(false);
+    setUserPhoneInput("");
+    setModalOpen(true);
+  };
+
+  const handleScrollGallery = (direction) => {
+    if (galleryRef.current) {
+      const scrollAmount = direction === "left" ? -340 : 340;
+      galleryRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const handleQuickLeadSubmit = (e) => {
+    e.preventDefault();
+    if (userPhoneInput.trim().length > 5) {
+      setContactSuccess(true);
     }
   };
 
@@ -164,16 +195,16 @@ export default function App() {
       {/* Main Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-          {/* Logo */}
+          {/* Authentic Logo */}
           <div 
             onClick={() => navigateTo("main")}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center cursor-pointer group"
           >
-            <div className="h-12 w-auto flex items-center justify-center group-hover:scale-105 transition">
+            <div className="h-14 w-auto flex items-center group-hover:scale-105 transition">
               <img
-                src={assetPath("/zielony-zajac-logo.svg")}
+                src={assetPath("/zielony-zajac-logo.jpg")}
                 alt="Zielony Zając"
-                className="h-11 w-auto object-contain"
+                className="h-12 w-auto object-contain rounded-lg"
               />
             </div>
           </div>
@@ -403,24 +434,28 @@ export default function App() {
         </div>
       </section>
 
-      {/* Brands Ticker */}
-      <section className="border-y border-slate-200/80 bg-slate-50/70 py-8 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-5">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-800">
-              Pracujemy wyłącznie na sprawdzonych markach klimatyzatorów
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
-            {BRANDS.map((brand, idx) => (
+      {/* Endless Marquee Brand Logos (Continuous ticker) */}
+      <section className="border-y border-slate-200/80 bg-slate-50/70 py-6 overflow-hidden">
+        <div className="text-center mb-4">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-800">
+            Pracujemy wyłącznie na sprawdzonych markach klimatyzatorów
+          </span>
+        </div>
+        
+        {/* Infinite scrolling marquee track */}
+        <div className="relative w-full overflow-hidden flex items-center">
+          <div className="animate-marquee flex items-center gap-8 py-2">
+            {[...BRAND_LOGOS, ...BRAND_LOGOS, ...BRAND_LOGOS].map((brand, idx) => (
               <div
                 key={idx}
-                className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-2 hover:border-emerald-300 transition"
+                className="h-16 px-6 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-center min-w-[150px] hover:border-emerald-400 transition"
               >
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="font-extrabold text-sm sm:text-base text-slate-800">
-                  {brand.name}
-                </span>
+                <img
+                  src={assetPath(brand.logo)}
+                  alt={brand.name}
+                  className="max-h-9 max-w-[120px] object-contain"
+                  loading="lazy"
+                />
               </div>
             ))}
           </div>
@@ -468,9 +503,12 @@ export default function App() {
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-500">od 3 490 zł z montażem</span>
-                <a href={`tel:${PHONE.replace(/\s+/g, "")}`} className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1">
+                <button
+                  onClick={() => handleOpenContactModal("Klimatyzacja w Mieszkaniu")}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                >
                   Zapytaj <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -499,9 +537,12 @@ export default function App() {
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-500">Wycena indywidualna</span>
-                <a href={`tel:${PHONE.replace(/\s+/g, "")}`} className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1">
+                <button
+                  onClick={() => handleOpenContactModal("Domy Jednorodzinne (Multi-Split)")}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                >
                   Zapytaj <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -530,9 +571,12 @@ export default function App() {
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-500">Oferta dla firm</span>
-                <a href={`tel:${PHONE.replace(/\s+/g, "")}`} className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1">
+                <button
+                  onClick={() => handleOpenContactModal("Biura i Lokale Usługowe")}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                >
                   Zapytaj <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -561,17 +605,20 @@ export default function App() {
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-500">od 250 zł</span>
-                <a href={`tel:${PHONE.replace(/\s+/g, "")}`} className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1">
+                <button
+                  onClick={() => handleOpenContactModal("Serwis i Odgrzybianie klimatyzacji")}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                >
                   Zamów serwis <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Marquee Realizations Accordion Preview (Directly after Services) */}
-      <section className="py-14 bg-slate-900 text-white overflow-hidden relative">
+      {/* Gallery Carousel with Side Arrows and clean container */}
+      <section className="py-16 bg-slate-900 text-white relative">
         <div className="max-w-6xl mx-auto px-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs uppercase font-extrabold tracking-wider text-emerald-400">
@@ -582,25 +629,45 @@ export default function App() {
               Zobacz wykonane realizacje z harmonijką ujęć
             </h2>
           </div>
-          <button
-            onClick={() => navigateTo("realizacje")}
-            className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition flex items-center gap-2 whitespace-nowrap"
-          >
-            Wszystkie obiekty i zdjęcia (80+)
-            <ArrowRight className="w-4 h-4" />
-          </button>
+
+          <div className="flex items-center gap-3">
+            {/* Carousel Side Navigation Arrows */}
+            <button
+              onClick={() => handleScrollGallery("left")}
+              aria-label="Poprzednie"
+              className="w-11 h-11 rounded-full bg-slate-800 hover:bg-emerald-600 text-white flex items-center justify-center border border-slate-700 shadow-md transition cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => handleScrollGallery("right")}
+              aria-label="Następne"
+              className="w-11 h-11 rounded-full bg-slate-800 hover:bg-emerald-600 text-white flex items-center justify-center border border-slate-700 shadow-md transition cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={() => navigateTo("realizacje")}
+              className="ml-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition flex items-center gap-2 whitespace-nowrap cursor-pointer"
+            >
+              Wszystkie (80+)
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
-        {/* Scrolling Cards Accordion Preview */}
-        <div className="relative w-full overflow-x-auto no-scrollbar py-2">
-          <div className="flex gap-5 px-4 min-w-max">
+        {/* Smooth Scrolling Container without ugly scrollbar */}
+        <div className="max-w-6xl mx-auto px-4">
+          <div
+            ref={galleryRef}
+            className="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-3"
+          >
             {projectObjects.map((obj) => (
               <div
                 key={obj.id}
                 onClick={() => navigateTo("realizacje")}
-                onMouseEnter={() => setHoveredMarqueeId(obj.id)}
-                onMouseLeave={() => setHoveredMarqueeId(null)}
-                className="group relative w-72 sm:w-80 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700/60 shadow-lg cursor-pointer transform hover:-translate-y-1 transition duration-300"
+                className="group relative w-72 sm:w-80 flex-shrink-0 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700/60 shadow-lg cursor-pointer transform hover:-translate-y-1 transition duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-950">
                   <img
@@ -609,8 +676,8 @@ export default function App() {
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     loading="lazy"
                   />
-                  {/* Mini floating accordion previews on hover */}
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-slate-950/80 backdrop-blur-md p-1 rounded-xl border border-white/10">
+                  {/* Floating preview thumbnails inside */}
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-slate-950/80 backdrop-blur-md p-1.5 rounded-xl border border-white/10">
                     <div className="flex gap-1">
                       {obj.photos.slice(0, 3).map((p, idx) => (
                         <div key={idx} className="w-6 h-6 rounded-md overflow-hidden border border-white/30">
@@ -652,9 +719,9 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-            {PACKAGES.map((pkg, idx) => (
+            {PACKAGES.map((pkg) => (
               <div
-                key={idx}
+                key={pkg.id}
                 className={`rounded-3xl p-7 flex flex-col justify-between transition duration-300 ${
                   pkg.popular
                     ? "bg-white border-2 border-emerald-600 shadow-xl relative"
@@ -702,17 +769,17 @@ export default function App() {
                 </div>
 
                 <div className="mt-8 pt-4">
-                  <a
-                    href={`tel:${PHONE.replace(/\s+/g, "")}`}
-                    className={`w-full py-3.5 rounded-2xl font-extrabold text-sm flex items-center justify-center gap-2 transition ${
+                  <button
+                    onClick={() => handleOpenContactModal(`Zamówienie: ${pkg.name} (${pkg.price})`)}
+                    className={`w-full py-3.5 rounded-2xl font-extrabold text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
                       pkg.popular
                         ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg"
                         : "bg-slate-100 hover:bg-emerald-50 text-slate-900 hover:text-emerald-700"
                     }`}
                   >
                     <Phone className="w-4 h-4" />
-                    Wybierz pakiet – Zadzwoń
-                  </a>
+                    Wybierz pakiet – Zadzwoń lub Zamów
+                  </button>
                 </div>
               </div>
             ))}
@@ -804,12 +871,13 @@ export default function App() {
 
           <div className="flex flex-wrap justify-center gap-2">
             {DISTRICTS.map((district, idx) => (
-              <span
+              <button
                 key={idx}
-                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-slate-700 text-xs font-semibold hover:border-emerald-400 hover:text-emerald-700 transition shadow-2xs"
+                onClick={() => handleOpenContactModal(`Dojazd i wycena w dzielnicy: Warszawa ${district}`)}
+                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-slate-700 text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 hover:bg-emerald-50/50 transition shadow-2xs cursor-pointer"
               >
                 📍 Klimatyzacja Warszawa {district}
-              </span>
+              </button>
             ))}
           </div>
         </div>
@@ -855,7 +923,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <img src={assetPath("/zielony-zajac-logo.svg")} alt="Logo" className="h-9 w-auto filter brightness-200" />
+              <img src={assetPath("/zielony-zajac-logo.jpg")} alt="Logo" className="h-10 w-auto rounded" />
             </div>
             <p className="text-slate-400 leading-relaxed">
               Zielony Zając Sp. z o.o.<br />
@@ -889,8 +957,8 @@ export default function App() {
           <div>
             <div className="font-bold text-white text-sm mb-3">Szybkie Linki</div>
             <div className="space-y-1.5">
-              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400">Strona QR Hub dla Klienta</button></div>
-              <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400">Wszystkie Realizacje (80+ zdjęć)</button></div>
+              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Strona QR Hub dla Klienta</button></div>
+              <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400 cursor-pointer">Wszystkie Realizacje (80+ zdjęć)</button></div>
               <div><a href="#cennik" className="hover:text-emerald-400">Cennik 2026/2027</a></div>
               <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Wizytówka Google</a></div>
             </div>
@@ -903,8 +971,98 @@ export default function App() {
         </div>
       </footer>
 
+      {/* Quick Interactive Order Modal */}
+      {modalOpen && (
+        <div 
+          onClick={() => setModalOpen(false)}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200"
+          >
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                  Zamów bezpłatną wycenę
+                </h3>
+                <p className="text-xs text-emerald-700 font-semibold mt-0.5">
+                  {modalSubject}
+                </p>
+              </div>
+            </div>
+
+            {contactSuccess ? (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Check className="w-8 h-8" />
+                </div>
+                <h4 className="text-lg font-black text-slate-900">Dziękujemy za kontakt!</h4>
+                <p className="text-xs text-slate-600 mt-2">
+                  Nasz technik oddzwoni pod podany numer w ciągu 15 minut z propozycją terminu montażu.
+                </p>
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="mt-5 w-full py-3 rounded-2xl bg-emerald-600 text-white font-bold text-sm cursor-pointer hover:bg-emerald-700 transition"
+                >
+                  Zamknij okno
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleQuickLeadSubmit} className="space-y-4">
+                <p className="text-xs text-slate-600">
+                  Zostaw swój numer telefonu — oddzwonimy i dobierzemy idealną moc klimatyzatora oraz zarezerwujemy termin:
+                </p>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Twój numer telefonu:
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="+48 ___ ___ ___"
+                    value={userPhoneInput}
+                    onChange={(e) => setUserPhoneInput(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500 text-sm font-semibold text-slate-900"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 transition cursor-pointer shadow-md"
+                >
+                  <Send className="w-4 h-4" />
+                  Poproś o kontakt w 15 minut
+                </button>
+
+                <div className="pt-2 text-center">
+                  <span className="text-xs text-slate-500 font-medium">Lub zadzwoń bezpośrednio:</span>
+                  <a
+                    href={`tel:${PHONE.replace(/\s+/g, "")}`}
+                    className="block text-sm font-black text-emerald-700 hover:text-emerald-800 mt-0.5"
+                  >
+                    📞 {PHONE}
+                  </a>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Floating Sticky Call Button */}
-      <div className="fixed bottom-5 right-5 z-50">
+      <div className="fixed bottom-5 right-5 z-40">
         <a
           href={`tel:${PHONE.replace(/\s+/g, "")}`}
           className="flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-2xl hover:scale-105 active:scale-95 transition border-2 border-emerald-400/40"

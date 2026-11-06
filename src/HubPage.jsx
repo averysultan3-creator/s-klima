@@ -1,5 +1,5 @@
 import React from "react";
-import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
+import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock } from "lucide-react";
 import { assetPath } from "./utils";
 
 export default function HubPage({ onGoToSite, onGoToRealizacje }) {
@@ -26,11 +26,11 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
       <div className="relative z-10 w-full max-w-md mx-auto px-5 py-8 flex-1 flex flex-col justify-center">
         {/* Logo and Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3.5 bg-white rounded-3xl border border-white/20 shadow-2xl mb-4">
+          <div className="inline-flex items-center justify-center p-3 bg-white rounded-3xl border border-white/20 shadow-2xl mb-4">
             <img
-              src={assetPath("/zielony-zajac-logo.svg")}
+              src={assetPath("/zielony-zajac-logo.jpg")}
               alt="Zielony Zając"
-              className="h-12 w-auto object-contain"
+              className="h-14 w-auto object-contain rounded-xl"
             />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-2">
@@ -61,7 +61,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
           {/* 1. Strona Główna */}
           <button
             onClick={onGoToSite}
-            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5"
+            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-xl bg-emerald-500/20 group-hover:bg-white/20 flex items-center justify-center text-emerald-400 group-hover:text-white transition">
@@ -82,7 +82,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
             href={googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5"
+            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-xl bg-amber-500/20 group-hover:bg-white/20 flex items-center justify-center text-amber-400 group-hover:text-white transition">
@@ -106,7 +106,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
           {/* 3. Realizacje */}
           <button
             onClick={onGoToRealizacje}
-            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5"
+            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-xl bg-teal-500/20 group-hover:bg-white/20 flex items-center justify-center text-teal-400 group-hover:text-white transition">
