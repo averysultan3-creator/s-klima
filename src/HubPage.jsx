@@ -2,7 +2,7 @@ import React from "react";
 import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock } from "lucide-react";
 import { assetPath } from "./utils";
 
-export default function HubPage({ onGoToSite, onGoToRealizacje }) {
+export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) {
   const phone = "+48 513 666 450";
   const email = "kontakt@zielonyzajac.pl";
   const googleMapsUrl = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
@@ -70,7 +70,31 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
               <div>
                 <div className="font-bold text-base text-white">Strona Oficjalna</div>
                 <div className="text-xs text-slate-300 group-hover:text-emerald-100">
-                  Oferta, cennik 2026/2027 i szczegóły montażu
+                  Oferta, usługi i montaż klimatyzacji
+                </div>
+              </div>
+            </div>
+            <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </button>
+
+          {/* Cennik 2027 Button */}
+          <button
+            onClick={onGoToCennik}
+            className="w-full group p-4 rounded-2xl bg-emerald-700/40 hover:bg-emerald-600 border border-emerald-500/30 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/30 group-hover:bg-white/20 flex items-center justify-center text-emerald-300 group-hover:text-white transition">
+                <span className="font-black text-lg">PLN</span>
+              </div>
+              <div>
+                <div className="font-bold text-base text-white flex items-center gap-2">
+                  Cennik Usług 2027
+                  <span className="text-[10px] bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded font-bold">
+                    Nowy
+                  </span>
+                </div>
+                <div className="text-xs text-slate-300 group-hover:text-emerald-100">
+                  Montaż split od 1600 zł, multisplit i serwis
                 </div>
               </div>
             </div>

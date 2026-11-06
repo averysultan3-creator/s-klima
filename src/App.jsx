@@ -25,7 +25,8 @@ import {
 } from "lucide-react";
 import HubPage from "./HubPage";
 import RealizacjePage, { projectObjects } from "./RealizacjePage";
-import HeroVisualRoom from "./HeroVisualRoom";
+import CennikPage from "./CennikPage";
+import OriginalHeroRoom from "./OriginalHeroRoom";
 import { assetPath } from "./utils";
 
 const PHONE = "+48 513 666 450";
@@ -34,6 +35,7 @@ const GOOGLE_MAPS_URL = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+W
 
 const BRAND_LOGOS = [
   { name: "Gree", logo: "/brands/gree.svg" },
+  { name: "Samsung", logo: "/brands/samsung.svg" },
   { name: "Hisense", logo: "/brands/hisense.svg" },
   { name: "LG", logo: "/brands/lg.svg" },
   { name: "Panasonic", logo: "/brands/panasonic.svg" },
@@ -126,6 +128,7 @@ export default function App() {
       const hash = window.location.hash;
       if (hash === "#/hub" || hash === "#hub") setCurrentView("hub");
       else if (hash === "#/realizacje" || hash === "#realizacje") setCurrentView("realizacje");
+      else if (hash === "#/cennik" || hash === "#cennik") setCurrentView("cennik");
       else setCurrentView("main");
     };
     handleHash();
@@ -137,6 +140,7 @@ export default function App() {
     setCurrentView(view);
     if (view === "hub") window.location.hash = "/hub";
     else if (view === "realizacje") window.location.hash = "/realizacje";
+    else if (view === "cennik") window.location.hash = "/cennik";
     else {
       window.location.hash = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -165,11 +169,15 @@ export default function App() {
   };
 
   if (currentView === "hub") {
-    return <HubPage onGoToSite={() => navigateTo("main")} onGoToRealizacje={() => navigateTo("realizacje")} />;
+    return <HubPage onGoToSite={() => navigateTo("main")} onGoToRealizacje={() => navigateTo("realizacje")} onGoToCennik={() => navigateTo("cennik")} />;
   }
 
   if (currentView === "realizacje") {
     return <RealizacjePage onBack={() => navigateTo("main")} />;
+  }
+
+  if (currentView === "cennik") {
+    return <CennikPage onBack={() => navigateTo("main")} onOpenOrder={(sub) => handleOpenContactModal(sub)} />;
   }
 
   return (
@@ -213,11 +221,14 @@ export default function App() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
             <a href="#oferta" className="hover:text-emerald-600 transition">Zakres Usług</a>
-            <button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-600 transition">
+            <button onClick={() => navigateTo("cennik")} className="hover:text-emerald-600 transition cursor-pointer font-bold text-emerald-800">
+              Cennik 2027
+            </button>
+            <button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-600 transition cursor-pointer">
               Realizacje (80+)
             </button>
-            <a href="#cennik" className="hover:text-emerald-600 transition">Cennik 2026/2027</a>
             <a href="#dlaczego-my" className="hover:text-emerald-600 transition">Dlaczego My</a>
+            <a href="#faq" className="hover:text-emerald-600 transition">FAQ</a>
             <a href="#dzielnice" className="hover:text-emerald-600 transition">Dzielnice</a>
             <a
               href={GOOGLE_MAPS_URL}
@@ -352,19 +363,19 @@ export default function App() {
                 <Phone className="w-5 h-5 text-emerald-100" />
                 Zadzwoń teraz: {PHONE}
               </a>
-              <a
-                href="#cennik"
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-300 shadow-sm transition flex items-center justify-center gap-2"
+              <button
+                onClick={() => navigateTo("cennik")}
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-300 shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                Sprawdź Cennik
+                Zobacz Cennik 2027
                 <ChevronRight className="w-4 h-4 text-slate-500" />
-              </a>
+              </button>
             </div>
           </div>
 
           {/* Right Interactive Cooling Room Component */}
           <div className="lg:col-span-5 relative">
-            <HeroVisualRoom />
+            <OriginalHeroRoom />
           </div>
         </div>
       </section>
@@ -638,96 +649,44 @@ export default function App() {
         </div>
       </section>
 
-      {/* Pricing Section (Cennik 2026/2027) */}
-      <section id="cennik" className="py-20 px-4 bg-slate-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-              Przejrzysty cennik na sezon 2026 / 2027
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-3">
-              Pakiety z Montażem «Pod Klucz»
-            </h2>
-            <p className="mt-3 text-slate-600 text-base">
-              Podajemy realne ceny z dostawą i kompletnym montażem. Bez ukrytych dopłat na miejscu.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-            {PACKAGES.map((pkg) => (
-              <div
-                key={pkg.id}
-                className={`rounded-3xl p-7 flex flex-col justify-between transition duration-300 ${
-                  pkg.popular
-                    ? "bg-white border-2 border-emerald-600 shadow-xl relative"
-                    : "bg-white border border-slate-200 shadow-sm hover:shadow-md"
-                }`}
-              >
-                {pkg.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs font-black uppercase tracking-wider px-4 py-1 rounded-full shadow">
-                    {pkg.badge}
-                  </div>
-                )}
-
-                <div>
-                  <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-                    {pkg.examples}
-                  </div>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">
-                    {pkg.name}
-                  </h3>
-                  <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                    {pkg.desc}
-                  </p>
-
-                  <div className="my-6 py-4 border-y border-slate-100">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold text-slate-500">od</span>
-                      <span className="text-4xl font-black text-slate-900">{pkg.price}</span>
-                    </div>
-                    <div className="text-[11px] text-emerald-700 font-semibold mt-1">
-                      {pkg.vatNote}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="text-xs font-extrabold uppercase tracking-wider text-slate-800">
-                      W pakiecie otrzymujesz:
-                    </div>
-                    {pkg.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-4">
-                  <button
-                    onClick={() => handleOpenContactModal(`Zamówienie: ${pkg.name} (${pkg.price})`)}
-                    className={`w-full py-3.5 rounded-2xl font-extrabold text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
-                      pkg.popular
-                        ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg"
-                        : "bg-slate-100 hover:bg-emerald-50 text-slate-900 hover:text-emerald-700"
-                    }`}
-                  >
-                    <Phone className="w-4 h-4" />
-                    Wybierz pakiet – Zadzwoń lub Zamów
-                  </button>
-                </div>
+      {/* Pricing Preview Banner linking to dedicated Cennik page */}
+      <section id="cennik" className="py-16 px-4 bg-slate-50">
+        <div className="max-w-5xl mx-auto bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="max-w-xl">
+              <span className="inline-block px-3.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                Oficjalny cennik usług 2027
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
+                Przejrzyste Ceny Montażu i Serwisu
+              </h2>
+              <p className="mt-3 text-emerald-100 text-sm sm:text-base leading-relaxed">
+                Montaż standardowy split już od <strong>1 600 zł netto</strong> (+8% VAT). Systemy MultiSplit, prace budowlane, przewierty w żelbecie i pełny serwis odgrzybiania.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-200">
+                <span>✓ Do 3m instalacji w cenie</span>
+                <span>•</span>
+                <span>✓ Bezpłatna wycena na miejscu</span>
+                <span>•</span>
+                <span>✓ Brak ukrytych dopłat</span>
               </div>
-            ))}
-          </div>
-
-          {/* Standard installation note */}
-          <div className="mt-12 bg-white rounded-2xl p-6 border border-slate-200 text-xs text-slate-600 max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-4">
-            <div className="p-3 bg-emerald-50 rounded-xl text-emerald-700 font-bold text-xl">
-              ℹ️
             </div>
-            <div>
-              <span className="font-bold text-slate-800">Co wchodzi w montaż standardowy?</span>{" "}
-              Dostarczenie urządzeń, wykonanie przewiertu diamentowego (do 40 cm), ułożenie instalacji freonowej do 3 m w korytku maskującym, zawieszenie jednostki wewnętrznej i agregatu na wibroizolatorach, wykonanie próżni, test szczelności azotem oraz uruchomienie i instruktaż obsługi.
+
+            <div className="flex flex-col gap-3 flex-shrink-0">
+              <button
+                onClick={() => navigateTo("cennik")}
+                className="px-8 py-4 rounded-2xl bg-white text-emerald-950 hover:bg-emerald-50 font-black text-base shadow-xl transition flex items-center justify-center gap-2 cursor-pointer group"
+              >
+                <span>Otwórz Pełny Cennik 2027</span>
+                <ArrowRight className="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition" />
+              </button>
+              <a
+                href={`tel:${PHONE.replace(/\s+/g, "")}`}
+                className="px-6 py-3 rounded-xl bg-emerald-700/80 hover:bg-emerald-700 text-white font-bold text-xs text-center border border-emerald-500/30 transition flex items-center justify-center gap-1.5"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                Zadzwoń po szybką wycenę: {PHONE}
+              </a>
             </div>
           </div>
         </div>
@@ -785,6 +744,67 @@ export default function App() {
                 Zapewniamy pełną gwarancję na sprzęt oraz wykonaną usługę montażu wraz z regularnymi przeglądami serwisowymi.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 px-4 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
+              Często zadawane pytania
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-3">
+              FAQ • Wszystko o montażu klimatyzacji
+            </h2>
+            <p className="mt-2 text-slate-600 text-sm">
+              Odpowiedzi na najważniejsze pytania przed zamówieniem instalacji w Warszawie.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "Ile trwa standardowy montaż klimatyzacji w mieszkaniu?",
+                a: "Zazwyczaj od 3 do 5 godzin. Przyjeżdżamy rano z kompletem sprzętu i odkurzaczem przemysłowym. Po południu instalacja jest sprawdzona ciśnieniowo, uruchomiona i gotowa do pracy.",
+              },
+              {
+                q: "Czy montaż zniszczy wyremontowane ściany?",
+                a: "Nie. Wykonujemy bezpyłowy przewiert wiertnicą diamentową z bezpośrednim odsysaniem pyłu. Trasy freonowe prowadzimy w estetycznych, wąskich korytkach maskujących lub w bruzdach ściennych, jeśli jesteś na etapie remontu.",
+              },
+              {
+                q: "Czy potrzebuję zgody spółdzielni lub wspólnoty mieszkaniowej?",
+                a: "Jeśli agregat montowany jest na posadzce balkonu poniżej linii balustrady, większość wspólnot w Warszawie nie wymaga zgody architektonicznej. Przy montażu na elewacji budynku pomagamy przygotować schemat i wniosek do spółdzielni.",
+              },
+              {
+                q: "Dlaczego stawka wynosi 8% VAT zamiast 23%?",
+                a: "Dla osób prywatnych w lokalach mieszkalnych o powierzchni do 150 m² oraz domach do 300 m² usługa montażu klimatyzacji wraz ze sprzętem jest opodatkowana preferencyjną stawką 8% VAT. Dla firm wystawiamy pełną fakturę 23% VAT.",
+              },
+              {
+                q: "Co ile należy wykonywać serwis i odgrzybianie?",
+                a: "Zalecamy przegląd minimum raz w roku (najlepiej na wiosnę przed sezonem upałów). Obejmuje on dezynfekcję parową parownika, czyszczenie filtrów z atestem PZH, sprawdzenie odpływu skroplin i ciśnienia czynnika R32. Regularny serwis jest też warunkiem utrzymania 5-letniej gwarancji.",
+              },
+              {
+                q: "Czy klimatyzatorem można ogrzewać mieszkanie w zimie?",
+                a: "Tak, wszystkie montowane przez nas modele (Gree, Daikin, LG, Samsung, Mitsubishi) posiadają funkcję pompy ciepła powietrze-powietrze i działają w trybie grzania nawet przy temperaturach zewnętrznych do -20°C / -25°C, będąc bardzo ekonomicznym źródłem ciepła w okresie jesienno-zimowym.",
+              },
+            ].map((faq, idx) => (
+              <details
+                key={idx}
+                className="group bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs open:border-emerald-500 transition"
+              >
+                <summary className="font-extrabold text-slate-900 text-base sm:text-lg cursor-pointer list-none flex items-center justify-between gap-4">
+                  <span>{faq.q}</span>
+                  <span className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm group-open:rotate-180 transition flex-shrink-0">
+                    ↓
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm text-slate-600 leading-relaxed pt-2 border-t border-slate-100">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
@@ -902,7 +922,16 @@ export default function App() {
 
         <div className="max-w-6xl mx-auto mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-slate-500 gap-2">
           <div>© {new Date().getFullYear()} Zielony Zając Sp. z o.o. Wszelkie prawa zastrzeżone.</div>
-          <div>Domenę obsługuje Cyberfolks • Warszawa, Mazowieckie</div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => handleOpenContactModal("Polityka Prywatności i RODO")}
+              className="text-slate-400 hover:text-emerald-400 underline underline-offset-2 cursor-pointer"
+            >
+              Polityka Prywatności i RODO
+            </button>
+            <span>•</span>
+            <span>Domenę obsługuje Cyberfolks</span>
+          </div>
         </div>
       </footer>
 
