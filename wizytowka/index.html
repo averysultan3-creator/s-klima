@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wizytówka Firmowa - Zielony Zając Sp. z o.o. | Klimatyzacja Warszawa</title>
+    <link rel="icon" type="image/jpeg" href="../zielony-zajac-logo.jpg" />
+    <meta name="theme-color" content="#064e3b" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap');
+      body { font-family: 'Plus Jakarta Sans', sans-serif; }
+      @media print {
+        body { background: white !important; color: black !important; padding: 0 !important; }
+        .no-print { display: none !important; }
+        .card-print { break-inside: avoid; page-break-inside: avoid; shadow: none !important; border: 1px solid #ccc !important; }
+      }
+    </style>
+  </head>
+  <body class="bg-slate-900 text-slate-100 min-h-screen pb-16 selection:bg-emerald-500 selection:text-white">
+    <!-- Navbar -->
+    <header class="no-print sticky top-0 z-30 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+      <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="../" class="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300 transition">
+          ← Powrót na stronę główną
+        </a>
+        <div class="flex items-center gap-3">
+          <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition cursor-pointer">
+            Drukuj / PDF
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="no-print max-w-4xl mx-auto px-4 pt-10 pb-6 text-center">
+      <span class="inline-block px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+        Oficjalna Wizytówka • Standard 85 × 55 mm
+      </span>
+      <h1 class="text-3xl font-black text-white">Zielony Zając Sp. z o.o.</h1>
+      <p class="text-slate-400 text-sm mt-1">Awers i rewers z kodem QR do mobilnego cennika i realizacji</p>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="max-w-5xl mx-auto px-4 py-6">
+      <div class="flex flex-col lg:flex-row items-center justify-center gap-8">
+        
+        <!-- Awers -->
+        <div class="flex flex-col items-center">
+          <span class="no-print text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Strona Przednia (Awers)</span>
+          <div class="card-print w-[360px] sm:w-[460px] aspect-[85/55] bg-gradient-to-br from-white via-slate-50 to-emerald-50/40 text-slate-900 rounded-2xl shadow-2xl p-6 sm:p-7 relative overflow-hidden border border-slate-200 flex flex-col justify-between">
+            <div class="absolute top-0 right-0 w-1.5 h-full bg-gradient-to-b from-emerald-500 to-teal-700"></div>
+            <div class="flex items-start justify-between">
+              <div>
+                <img src="../zielony-zajac-logo.jpg" alt="Zielony Zając" class="h-10 sm:h-12 w-auto object-contain rounded" />
+                <div class="mt-2 text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-800">Montaż i Serwis Klimatyzacji</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-extrabold border border-emerald-300">
+                F-Gaz UDT
+              </span>
+            </div>
+
+            <div class="my-auto py-1">
+              <div class="text-xs sm:text-sm font-black text-slate-900">Zielony Zając Sp. z o.o.</div>
+              <div class="text-[11px] sm:text-xs text-slate-600">Profesjonalny montaż w 1 dzień • Warszawa i okolice</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 text-[11px] sm:text-xs">
+              <div class="font-bold text-slate-900">📞 +48 513 666 450</div>
+              <div class="text-slate-700">🌐 zielonyzajac.pl</div>
+              <div class="text-slate-700 truncate">✉️ kontakt@zielonyzajac.pl</div>
+              <div class="text-slate-700">📍 Warszawa i Mazowsze</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rewers -->
+        <div class="flex flex-col items-center">
+          <span class="no-print text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Strona Tylna (Rewers z QR)</span>
+          <div class="card-print w-[360px] sm:w-[460px] aspect-[85/55] bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900 text-white rounded-2xl shadow-2xl p-6 sm:p-7 relative overflow-hidden border border-emerald-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-[10px] font-bold text-emerald-400 tracking-wider uppercase">
+              <span>Szybki Kontakt i Oferta</span>
+              <span>Zeskanuj Smartfonem</span>
+            </div>
+
+            <div class="my-auto flex items-center justify-between gap-4 py-1">
+              <div class="bg-white p-2 rounded-xl shadow border border-emerald-400/40 flex-shrink-0">
+                <img src="../qr-hub.svg" alt="QR Kod Hub" class="w-24 h-24 sm:w-28 sm:h-28 object-contain" />
+              </div>
+              <div class="space-y-1.5 flex-1 pl-2">
+                <div class="text-xs sm:text-sm font-black text-white leading-tight">
+                  Cennik, Realizacje i Kontakt w 1 kliknięcie
+                </div>
+                <p class="text-[10px] sm:text-xs text-slate-300">
+                  Skieruj aparat telefonu na kod QR, aby otworzyć:
+                </p>
+                <div class="text-[10px] sm:text-xs space-y-0.5 text-emerald-300 font-semibold">
+                  <div>• Cennik montażu 2027</div>
+                  <div>• Galerię 80+ realizacji</div>
+                  <div>• Opinie Google i kontakt</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-emerald-800/80 flex items-center justify-between text-[10px] text-slate-300 font-medium">
+              <div><strong class="text-white">Zielony Zając Sp. z o.o.</strong> • NIP: 1133216745</div>
+              <div class="text-emerald-400 font-bold">Darmowa wycena w 24h</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Panel -->
+      <div class="no-print max-w-xl mx-auto mt-12 bg-slate-950 p-6 rounded-3xl border border-slate-800 text-center space-y-3">
+        <h3 class="text-base font-bold text-white">Druk wizytówek dla firmy</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Możesz wydrukować ten arkusz lub zapisać jako PDF w skali 100% z opcją druku dwustronnego.
+        </p>
+        <button onclick="window.print()" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow transition cursor-pointer">
+          Drukuj wizytówki (lub Zapisz do PDF)
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
