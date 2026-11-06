@@ -22,10 +22,17 @@ import {
   X,
   Layers,
   Send,
+  Building2,
+  Home,
+  Briefcase,
+  FileCheck2,
+  Award,
+  CreditCard,
 } from "lucide-react";
 import HubPage from "./HubPage";
 import RealizacjePage, { projectObjects } from "./RealizacjePage";
 import CennikPage from "./CennikPage";
+import WizytowkaPage from "./WizytowkaPage";
 import OriginalHeroRoom from "./OriginalHeroRoom";
 import RodoModal from "./RodoModal";
 import { assetPath } from "./utils";
@@ -132,6 +139,7 @@ export default function App() {
       if (hash === "#/hub" || hash === "#hub") setCurrentView("hub");
       else if (hash === "#/realizacje" || hash === "#realizacje") setCurrentView("realizacje");
       else if (hash === "#/cennik" || hash === "#cennik") setCurrentView("cennik");
+      else if (hash === "#/wizytowka" || hash === "#wizytowka") setCurrentView("wizytowka");
       else setCurrentView("main");
     };
     handleHash();
@@ -144,6 +152,7 @@ export default function App() {
     if (view === "hub") window.location.hash = "/hub";
     else if (view === "realizacje") window.location.hash = "/realizacje";
     else if (view === "cennik") window.location.hash = "/cennik";
+    else if (view === "wizytowka") window.location.hash = "/wizytowka";
     else {
       window.location.hash = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -171,38 +180,63 @@ export default function App() {
     }
   };
 
-  if (currentView === "hub") {
-    return <HubPage onGoToSite={() => navigateTo("main")} onGoToRealizacje={() => navigateTo("realizacje")} onGoToCennik={() => navigateTo("cennik")} />;
-  }
-
-  if (currentView === "realizacje") {
-    return <RealizacjePage onBack={() => navigateTo("main")} />;
-  }
-
-  if (currentView === "cennik") {
-    return <CennikPage onBack={() => navigateTo("main")} onOpenOrder={(sub) => handleOpenContactModal(sub)} />;
-  }
-
   return (
-    <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-emerald-500 selection:text-white">
-      {/* Top Banner */}
-      <div className="bg-emerald-950 text-emerald-100 text-xs py-2 px-4 border-b border-emerald-900">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Warszawa i Mazowsze • Wolne terminy na bieżący tydzień</span>
+    <>
+      {currentView === "hub" && (
+        <HubPage
+          onGoToSite={() => navigateTo("main")}
+          onGoToRealizacje={() => navigateTo("realizacje")}
+          onGoToCennik={() => navigateTo("cennik")}
+          onGoToWizytowka={() => navigateTo("wizytowka")}
+        />
+      )}
+
+      {currentView === "realizacje" && (
+        <RealizacjePage
+          onBack={() => navigateTo("main")}
+          onOpenOrder={(sub) => handleOpenContactModal(sub)}
+        />
+      )}
+
+      {currentView === "cennik" && (
+        <CennikPage
+          onBack={() => navigateTo("main")}
+          onOpenOrder={(sub) => handleOpenContactModal(sub)}
+        />
+      )}
+
+      {currentView === "wizytowka" && (
+        <WizytowkaPage
+          onBack={() => navigateTo("main")}
+        />
+      )}
+
+      {currentView === "main" && (
+        <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-emerald-500 selection:text-white">
+          {/* Top Banner */}
+          <div className="bg-emerald-950 text-emerald-100 text-xs py-2 px-4 border-b border-emerald-900">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Warszawa i Mazowsze • Wolne terminy na bieżący tydzień</span>
+              </div>
+              <div className="flex items-center gap-3 sm:gap-4 text-emerald-200">
+                <span className="hidden sm:inline">Pn–Pt: 8:00–18:00 | Sob: 9:00–15:00</span>
+                <button
+                  onClick={() => navigateTo("wizytowka")}
+                  className="text-emerald-300 hover:text-white font-bold underline underline-offset-2 transition cursor-pointer"
+                >
+                  Wizytówka
+                </button>
+                <button
+                  onClick={() => navigateTo("hub")}
+                  className="text-white hover:text-emerald-300 font-bold underline underline-offset-2 transition cursor-pointer"
+                >
+                  Wersja Mobilna QR
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-emerald-200">
-            <span>Pn–Pt: 8:00–18:00 | Sob: 9:00–15:00</span>
-            <button
-              onClick={() => navigateTo("hub")}
-              className="text-white hover:text-emerald-300 font-bold underline underline-offset-2 transition"
-            >
-              Wersja Mobilna QR
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Main Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
@@ -222,13 +256,17 @@ export default function App() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-7 text-sm font-semibold text-slate-600">
             <a href="#oferta" className="hover:text-emerald-600 transition">Zakres Usług</a>
             <button onClick={() => navigateTo("cennik")} className="hover:text-emerald-600 transition cursor-pointer font-bold text-emerald-800">
               Cennik 2027
             </button>
             <button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-600 transition cursor-pointer">
               Realizacje (80+)
+            </button>
+            <button onClick={() => navigateTo("wizytowka")} className="hover:text-emerald-600 transition cursor-pointer font-bold text-slate-800 flex items-center gap-1">
+              <CreditCard className="w-3.5 h-3.5 text-emerald-600" />
+              Wizytówka
             </button>
             <a href="#dlaczego-my" className="hover:text-emerald-600 transition">Dlaczego My</a>
             <a href="#faq" className="hover:text-emerald-600 transition">FAQ</a>
@@ -280,13 +318,18 @@ export default function App() {
             >
               Realizacje (80+ zdjęć)
             </button>
-            <a
-              href="#cennik"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 py-1"
+            <button
+              onClick={() => { setMobileMenuOpen(false); navigateTo("cennik"); }}
+              className="block text-left w-full text-base font-semibold text-slate-700 py-1"
             >
-              Cennik 2026/2027
-            </a>
+              Cennik 2027
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); navigateTo("wizytowka"); }}
+              className="block text-left w-full text-base font-semibold text-slate-700 py-1 text-emerald-800 font-bold"
+            >
+              Wizytówka Firmowa (Druk / QR)
+            </button>
             <a
               href="#dlaczego-my"
               onClick={() => setMobileMenuOpen(false)}
@@ -324,25 +367,25 @@ export default function App() {
       <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/60 via-white to-slate-50 pt-10 sm:pt-16 pb-16 px-4">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Text Column */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-900 text-xs font-bold uppercase tracking-wider">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               Autoryzowany instalator • Certyfikat F-Gaz
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-[46px] font-black text-slate-900 leading-[1.15] tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-[46px] font-black text-slate-900 leading-[1.15] tracking-tight">
               Montaż i Serwis Klimatyzacji Warszawa
               <span className="block text-emerald-600 mt-1 sm:mt-2">
                 Czysto, Szybko, w 1 Dzień.
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-sm sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Kompleksowy montaż klimatyzacji do mieszkań, domów i lokali. Bezpłatny dobór mocy, bezpyłowe wiercenie diamentowe i gwarancja do 5 lat.
             </p>
 
             {/* Quick Benefits Tags */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3 pt-2">
               <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
                 <Check className="w-4 h-4 text-emerald-600" />
                 Montaż w 1 dzień roboczy
@@ -358,17 +401,17 @@ export default function App() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2 sm:pt-3">
               <a
                 href={`tel:${PHONE.replace(/\s+/g, "")}`}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-base shadow-xl hover:shadow-emerald-600/30 transition flex items-center justify-center gap-3 transform hover:-translate-y-0.5"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-xl hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2.5 transform hover:-translate-y-0.5"
               >
-                <Phone className="w-5 h-5 text-emerald-100" />
-                Zadzwoń teraz: {PHONE}
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-100" />
+                <span>Zadzwoń: {PHONE}</span>
               </a>
               <button
                 onClick={() => navigateTo("cennik")}
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-300 shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm sm:text-base border border-slate-300 shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 Zobacz Cennik 2027
                 <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -376,8 +419,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Interactive Cooling Room Component */}
-          <div className="lg:col-span-5 relative">
+          {/* Right Interactive Cooling Room Component (Desktop only, hidden on mobile for clean UX) */}
+          <div className="hidden lg:block lg:col-span-5 relative">
             <OriginalHeroRoom />
           </div>
         </div>
@@ -430,8 +473,8 @@ export default function App() {
             {/* 1. Mieszkania */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
-                  🏢
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition shadow-xs">
+                  <Building2 className="w-6 h-6 text-emerald-700" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">
                   Klimatyzacja w Mieszkaniu
@@ -464,8 +507,8 @@ export default function App() {
             {/* 2. Domy */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
-                  🏡
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition shadow-xs">
+                  <Home className="w-6 h-6 text-emerald-700" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">
                   Domy Jednorodzinne
@@ -498,8 +541,8 @@ export default function App() {
             {/* 3. Biura */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
-                  💼
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition shadow-xs">
+                  <Briefcase className="w-6 h-6 text-emerald-700" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">
                   Biura i Lokale Usługowe
@@ -532,8 +575,8 @@ export default function App() {
             {/* 4. Serwis */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
-                  🛡️
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition shadow-xs">
+                  <Wrench className="w-6 h-6 text-emerald-700" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">
                   Serwis i Odgrzybianie
@@ -667,11 +710,11 @@ export default function App() {
                 Montaż standardowy split już od <strong>1 600 zł netto</strong> (+8% VAT). Systemy MultiSplit, prace budowlane, przewierty w żelbecie i pełny serwis odgrzybiania.
               </p>
               <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-200">
-                <span>✓ Do 3m instalacji w cenie</span>
+                <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Do 3m instalacji w cenie</span>
                 <span>•</span>
-                <span>✓ Bezpłatna wycena na miejscu</span>
+                <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Bezpłatna wycena na miejscu</span>
                 <span>•</span>
-                <span>✓ Brak ukrytych dopłat</span>
+                <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Brak ukrytych dopłat</span>
               </div>
             </div>
 
@@ -709,8 +752,8 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">
-                📜
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
+                <FileCheck2 className="w-6 h-6 text-emerald-700" />
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Certyfikat F-Gaz</h3>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -719,8 +762,8 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">
-                🧹
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
+                <Sparkles className="w-6 h-6 text-emerald-700" />
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Montaż Bezpyłowy</h3>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -729,8 +772,8 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">
-                ⚡
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
+                <Zap className="w-6 h-6 text-emerald-700" />
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Realizacja w 1 Dzień</h3>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -739,8 +782,8 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">
-                🛡️
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
+                <ShieldCheck className="w-6 h-6 text-emerald-700" />
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Do 5 Lat Gwarancji</h3>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -833,7 +876,8 @@ export default function App() {
                 onClick={() => handleOpenContactModal(`Dojazd i wycena w dzielnicy: Warszawa ${district}`)}
                 className="px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-xs sm:text-sm font-bold hover:border-emerald-500 hover:text-emerald-700 hover:bg-emerald-50/50 transition shadow-2xs cursor-pointer flex items-center gap-1.5"
               >
-                <span>📍</span> Klimatyzacja Warszawa {district}
+                <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                <span>Klimatyzacja Warszawa {district}</span>
               </button>
             ))}
           </div>
@@ -924,10 +968,11 @@ export default function App() {
           <div>
             <div className="font-bold text-white text-sm mb-3">Szybkie Linki</div>
             <div className="space-y-1.5">
-              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Strona QR Hub dla Klienta</button></div>
+              <div><button onClick={() => navigateTo("wizytowka")} className="hover:text-emerald-400 cursor-pointer font-bold text-emerald-300">Wizytówka Firmowa (Awers / Rewers)</button></div>
+              <div><button onClick={() => navigateTo("cennik")} className="hover:text-emerald-400 cursor-pointer">Cennik Usług 2027</button></div>
               <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400 cursor-pointer">Wszystkie Realizacje (80+ zdjęć)</button></div>
-              <div><a href="#cennik" className="hover:text-emerald-400">Cennik 2026/2027</a></div>
-              <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Wizytówka Google</a></div>
+              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Strona QR Hub dla Klienta</button></div>
+              <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Wizytówka Google Maps</a></div>
             </div>
           </div>
         </div>
@@ -946,6 +991,8 @@ export default function App() {
           </div>
         </div>
       </footer>
+        </div>
+      )}
 
       {/* RODO / Privacy Policy Modal */}
       <RodoModal isOpen={rodoOpen} onClose={() => setRodoOpen(false)} />
@@ -1029,9 +1076,10 @@ export default function App() {
                   <span className="text-xs text-slate-500 font-medium">Lub zadzwoń bezpośrednio:</span>
                   <a
                     href={`tel:${PHONE.replace(/\s+/g, "")}`}
-                    className="block text-sm font-black text-emerald-700 hover:text-emerald-800 mt-0.5"
+                    className="inline-flex items-center gap-1.5 text-sm font-black text-emerald-700 hover:text-emerald-800 mt-0.5"
                   >
-                    📞 {PHONE}
+                    <Phone className="w-4 h-4 text-emerald-700" />
+                    <span>{PHONE}</span>
                   </a>
                 </div>
               </form>
@@ -1040,20 +1088,23 @@ export default function App() {
         </div>
       )}
 
-      {/* Floating Sticky Call Button */}
-      <div className="fixed bottom-5 right-5 z-40">
-        <a
-          href={`tel:${PHONE.replace(/\s+/g, "")}`}
-          className="flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-2xl hover:scale-105 active:scale-95 transition border-2 border-emerald-400/40"
-        >
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-          </span>
-          <Phone className="w-4 h-4" />
-          <span>Zadzwoń teraz</span>
-        </a>
-      </div>
-    </div>
+      {/* Floating Sticky Call Button (Hidden on Hub and Wizytowka, sleek circle on mobile, pill on desktop) */}
+      {currentView !== "hub" && currentView !== "wizytowka" && (
+        <div className="fixed bottom-5 right-5 z-40">
+          <a
+            href={`tel:${PHONE.replace(/\s+/g, "")}`}
+            aria-label="Zadzwoń do nas"
+            className="flex items-center justify-center p-3.5 sm:px-5 sm:py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-2xl hover:scale-105 active:scale-95 transition border-2 border-emerald-400/40"
+          >
+            <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3 sm:mr-1">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-white"></span>
+            </span>
+            <Phone className="w-5 h-5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline ml-1.5">Zadzwoń teraz</span>
+          </a>
+        </div>
+      )}
+    </>
   );
 }

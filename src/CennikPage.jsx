@@ -190,9 +190,17 @@ export default function CennikPage({ onBack, onOpenOrder }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {additionalServices.map((item, idx) => (
-                <div key={idx} className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+                <div key={idx} className="p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-100 flex items-center justify-between transition">
                   <span className="text-xs font-semibold text-slate-800">{item.name}</span>
-                  <span className="text-sm font-black text-emerald-800 whitespace-nowrap ml-2">{item.price}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-black text-emerald-800 whitespace-nowrap ml-2">{item.price}</span>
+                    <button
+                      onClick={() => onOpenOrder(`Usługa dodatkowa: ${item.name}`)}
+                      className="px-2.5 py-1 rounded-lg bg-slate-200/80 hover:bg-emerald-600 text-slate-700 hover:text-white font-bold text-[11px] transition cursor-pointer"
+                    >
+                      Zamów
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -281,6 +289,12 @@ export default function CennikPage({ onBack, onOpenOrder }) {
               Zadzwoń do nas, a nasz instalator bezpłatnie skonsultuje warunki techniczne i przygotuje precyzyjny kosztorys montażu.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <button
+                onClick={() => onOpenOrder("Wycena klimatyzacji (z cennika 2027)")}
+                className="px-7 py-4 rounded-2xl bg-white hover:bg-slate-100 text-emerald-950 font-black text-base shadow-xl transition flex items-center gap-2 cursor-pointer"
+              >
+                Zamów bezpłatną wycenę
+              </button>
               <a
                 href="tel:+48513666450"
                 className="px-7 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-base shadow-xl transition flex items-center gap-2 cursor-pointer"

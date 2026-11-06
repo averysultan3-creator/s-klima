@@ -134,7 +134,7 @@ export const projectObjects = [
   },
 ];
 
-export default function RealizacjePage({ onBack }) {
+export default function RealizacjePage({ onBack, onOpenOrder }) {
   const [activeFilter, setActiveFilter] = useState("all");
   const [hoveredObjectId, setHoveredObjectId] = useState(null);
   const [activePhotoIndex, setActivePhotoIndex] = useState({});
@@ -384,6 +384,12 @@ export default function RealizacjePage({ onBack }) {
             Przyjeżdżamy na bezpłatną wizję lokalną w Warszawie i okolicach. Montujemy w 1 dzień roboczy.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <button
+              onClick={() => onOpenOrder && onOpenOrder("Wycena po obejrzeniu galerii 80+")}
+              className="px-6 py-3.5 rounded-2xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-base shadow-lg transition flex items-center gap-2 cursor-pointer"
+            >
+              Zamów bezpłatną wycenę
+            </button>
             <a
               href="tel:+48513666450"
               className="px-6 py-3.5 rounded-2xl bg-white text-emerald-950 font-bold text-base hover:bg-emerald-50 shadow-lg transition flex items-center gap-2"
@@ -393,9 +399,9 @@ export default function RealizacjePage({ onBack }) {
             </a>
             <button
               onClick={onBack}
-              className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold text-base transition border border-white/20"
+              className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold text-base transition border border-white/20 cursor-pointer"
             >
-              Powrót do cennika
+              Powrót do strony głównej
             </button>
           </div>
         </div>
