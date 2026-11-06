@@ -2,7 +2,7 @@ import React from "react";
 import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock, CreditCard } from "lucide-react";
 import { assetPath } from "./utils";
 
-export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik, onGoToWizytowka }) {
+export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) {
   const phone = "+48 513 666 450";
   const email = "kontakt@zielonyzajac.pl";
   const googleMapsUrl = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
@@ -140,25 +140,6 @@ export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik, on
                 <div className="font-bold text-base text-white">Nasze Realizacje</div>
                 <div className="text-xs text-slate-300 group-hover:text-emerald-100">
                   Galeria estetycznych montaży bez widocznych rur
-                </div>
-              </div>
-            </div>
-            <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </button>
-
-          {/* 4. Wizytowka */}
-          <button
-            onClick={onGoToWizytowka}
-            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 group-hover:bg-white/20 flex items-center justify-center text-emerald-400 group-hover:text-white transition">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="font-bold text-base text-white">Wizytówka Firmowa</div>
-                <div className="text-xs text-slate-300 group-hover:text-emerald-100">
-                  Awers, rewers z QR i wersja do druku
                 </div>
               </div>
             </div>

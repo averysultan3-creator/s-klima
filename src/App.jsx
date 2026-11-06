@@ -187,7 +187,6 @@ export default function App() {
           onGoToSite={() => navigateTo("main")}
           onGoToRealizacje={() => navigateTo("realizacje")}
           onGoToCennik={() => navigateTo("cennik")}
-          onGoToWizytowka={() => navigateTo("wizytowka")}
         />
       )}
 
@@ -223,12 +222,6 @@ export default function App() {
               <div className="flex items-center gap-3 sm:gap-4 text-emerald-200">
                 <span className="hidden sm:inline">Pn–Pt: 8:00–18:00 | Sob: 9:00–15:00</span>
                 <button
-                  onClick={() => navigateTo("wizytowka")}
-                  className="text-emerald-300 hover:text-white font-bold underline underline-offset-2 transition cursor-pointer"
-                >
-                  Wizytówka
-                </button>
-                <button
                   onClick={() => navigateTo("hub")}
                   className="text-white hover:text-emerald-300 font-bold underline underline-offset-2 transition cursor-pointer"
                 >
@@ -256,26 +249,17 @@ export default function App() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-7 text-sm font-semibold text-slate-600">
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
             <a href="#oferta" className="hover:text-emerald-600 transition">Zakres Usług</a>
-            <button onClick={() => navigateTo("cennik")} className="hover:text-emerald-600 transition cursor-pointer font-bold text-emerald-800">
-              Cennik 2027
-            </button>
             <button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-600 transition cursor-pointer">
               Realizacje (80+)
             </button>
-            <button onClick={() => navigateTo("wizytowka")} className="hover:text-emerald-600 transition cursor-pointer font-bold text-slate-800 flex items-center gap-1">
-              <CreditCard className="w-3.5 h-3.5 text-emerald-600" />
-              Wizytówka
-            </button>
             <a href="#dlaczego-my" className="hover:text-emerald-600 transition">Dlaczego My</a>
-            <a href="#faq" className="hover:text-emerald-600 transition">FAQ</a>
-            <a href="#dzielnice" className="hover:text-emerald-600 transition">Dzielnice</a>
             <a
               href={GOOGLE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-amber-600 hover:text-amber-700 font-bold transition"
+              className="flex items-center gap-1.5 text-amber-600 hover:text-amber-700 font-bold transition"
             >
               <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
               Opinie 5.0
@@ -318,18 +302,6 @@ export default function App() {
             >
               Realizacje (80+ zdjęć)
             </button>
-            <button
-              onClick={() => { setMobileMenuOpen(false); navigateTo("cennik"); }}
-              className="block text-left w-full text-base font-semibold text-slate-700 py-1"
-            >
-              Cennik 2027
-            </button>
-            <button
-              onClick={() => { setMobileMenuOpen(false); navigateTo("wizytowka"); }}
-              className="block text-left w-full text-base font-semibold text-slate-700 py-1 text-emerald-800 font-bold"
-            >
-              Wizytówka Firmowa (Druk / QR)
-            </button>
             <a
               href="#dlaczego-my"
               onClick={() => setMobileMenuOpen(false)}
@@ -338,11 +310,14 @@ export default function App() {
               Dlaczego My
             </a>
             <a
-              href="#dzielnice"
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 py-1"
+              className="flex items-center gap-1.5 text-base font-bold text-amber-600 py-1"
             >
-              Dzielnice Warszawy
+              <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
+              Opinie klientów Google (5.0 ★)
             </a>
             <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
               <a
@@ -968,11 +943,10 @@ export default function App() {
           <div>
             <div className="font-bold text-white text-sm mb-3">Szybkie Linki</div>
             <div className="space-y-1.5">
-              <div><button onClick={() => navigateTo("wizytowka")} className="hover:text-emerald-400 cursor-pointer font-bold text-emerald-300">Wizytówka Firmowa (Awers / Rewers)</button></div>
               <div><button onClick={() => navigateTo("cennik")} className="hover:text-emerald-400 cursor-pointer">Cennik Usług 2027</button></div>
               <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400 cursor-pointer">Wszystkie Realizacje (80+ zdjęć)</button></div>
               <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Strona QR Hub dla Klienta</button></div>
-              <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Wizytówka Google Maps</a></div>
+              <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Opinie Google Maps</a></div>
             </div>
           </div>
         </div>
