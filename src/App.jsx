@@ -27,6 +27,7 @@ import HubPage from "./HubPage";
 import RealizacjePage, { projectObjects } from "./RealizacjePage";
 import CennikPage from "./CennikPage";
 import OriginalHeroRoom from "./OriginalHeroRoom";
+import RodoModal from "./RodoModal";
 import { assetPath } from "./utils";
 
 const PHONE = "+48 513 666 450";
@@ -119,6 +120,8 @@ export default function App() {
   const [modalSubject, setModalSubject] = useState("");
   const [contactSuccess, setContactSuccess] = useState(false);
   const [userPhoneInput, setUserPhoneInput] = useState("");
+  const [rodoOpen, setRodoOpen] = useState(false);
+  const [showAllDistricts, setShowAllDistricts] = useState(false);
 
   const galleryRef = useRef(null);
 
@@ -811,29 +814,38 @@ export default function App() {
 
       {/* Warsaw Districts SEO Section */}
       <section id="dzielnice" className="py-16 px-4 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-              Lokalny montaż w Warszawie
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-3">
-              Gdzie Realizujemy Usługi Montażu?
-            </h2>
-            <p className="mt-2 text-slate-600 text-sm">
-              Dojazd na bezpłatną wizję lokalną oraz montaż realizujemy we wszystkich 18 dzielnicach Warszawy oraz okolicznych miejscowościach:
-            </p>
-          </div>
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
+            Lokalny montaż w Warszawie
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-3">
+            Gdzie Realizujemy Usługi Montażu?
+          </h2>
+          <p className="mt-2 text-slate-600 text-sm max-w-xl mx-auto">
+            Dojazd na bezpłatną wizję lokalną oraz montaż realizujemy we wszystkich 18 dzielnicach Warszawy oraz okolicznych miejscowościach:
+          </p>
 
-          <div className="flex flex-wrap justify-center gap-2">
-            {DISTRICTS.map((district, idx) => (
+          {/* Top 3 most frequent districts initially */}
+          <div className="flex flex-wrap justify-center gap-2.5 mt-8">
+            {(showAllDistricts ? DISTRICTS : DISTRICTS.slice(0, 3)).map((district, idx) => (
               <button
                 key={idx}
                 onClick={() => handleOpenContactModal(`Dojazd i wycena w dzielnicy: Warszawa ${district}`)}
-                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-slate-700 text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 hover:bg-emerald-50/50 transition shadow-2xs cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-xs sm:text-sm font-bold hover:border-emerald-500 hover:text-emerald-700 hover:bg-emerald-50/50 transition shadow-2xs cursor-pointer flex items-center gap-1.5"
               >
-                📍 Klimatyzacja Warszawa {district}
+                <span>📍</span> Klimatyzacja Warszawa {district}
               </button>
             ))}
+          </div>
+
+          {/* Expand / Collapse Button */}
+          <div className="mt-5">
+            <button
+              onClick={() => setShowAllDistricts(!showAllDistricts)}
+              className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-slate-200/80 hover:bg-emerald-100 text-slate-700 hover:text-emerald-800 font-bold text-xs transition cursor-pointer"
+            >
+              <span>{showAllDistricts ? "Zwiń listę dzielnic ↑" : "Pokaż pozostałe dzielnice Warszawy i okolice (18+) ↓"}</span>
+            </button>
           </div>
         </div>
       </section>
@@ -924,7 +936,7 @@ export default function App() {
           <div>© {new Date().getFullYear()} Zielony Zając Sp. z o.o. Wszelkie prawa zastrzeżone.</div>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => handleOpenContactModal("Polityka Prywatności i RODO")}
+              onClick={() => setRodoOpen(true)}
               className="text-slate-400 hover:text-emerald-400 underline underline-offset-2 cursor-pointer"
             >
               Polityka Prywatności i RODO
@@ -934,6 +946,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* RODO / Privacy Policy Modal */}
+      <RodoModal isOpen={rodoOpen} onClose={() => setRodoOpen(false)} />
 
       {/* Quick Interactive Order Modal */}
       {modalOpen && (

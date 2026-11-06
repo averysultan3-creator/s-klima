@@ -271,25 +271,30 @@ export default function CennikPage({ onBack, onOpenOrder }) {
         )}
 
         {/* Contact Banner */}
-        <div className="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-3xl p-8 text-white shadow-xl text-center">
-          <h3 className="text-2xl font-black">Zapraszamy do kontaktu i bezpłatnej wyceny!</h3>
-          <p className="text-sm text-emerald-100 mt-2">
-            Zadzwoń do nas, a nasz instalator bezpłatnie skonsultuje warunki techniczne Twojego lokalu.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <a
-              href="tel:+48513666450"
-              className="px-6 py-3.5 rounded-2xl bg-white text-emerald-950 font-black text-base hover:bg-emerald-50 shadow-lg transition flex items-center gap-2"
-            >
-              <Phone className="w-5 h-5 text-emerald-600" />
-              Zadzwoń: +48 513 666 450
-            </a>
-            <button
-              onClick={onBack}
-              className="px-6 py-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-base transition border border-emerald-500/40 cursor-pointer"
-            >
-              Wróć na stronę główną
-            </button>
+        <div className="bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 rounded-3xl p-8 sm:p-10 text-white shadow-2xl text-center border border-emerald-800 relative overflow-hidden">
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <span className="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+              Darmowa wycena i doradztwo
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-black text-white">Zapraszamy do kontaktu i bezpłatnej wyceny!</h3>
+            <p className="text-sm text-emerald-200 mt-2 leading-relaxed">
+              Zadzwoń do nas, a nasz instalator bezpłatnie skonsultuje warunki techniczne i przygotuje precyzyjny kosztorys montażu.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <a
+                href="tel:+48513666450"
+                className="px-7 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-base shadow-xl transition flex items-center gap-2 cursor-pointer"
+              >
+                <Phone className="w-5 h-5 text-slate-950" />
+                Zadzwoń: +48 513 666 450
+              </a>
+              <button
+                onClick={onBack}
+                className="px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-base transition border border-white/20 cursor-pointer"
+              >
+                Wróć na stronę główną
+              </button>
+            </div>
           </div>
         </div>
       </main>
