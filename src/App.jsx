@@ -19,10 +19,11 @@ import {
   Check,
   Menu,
   X,
-  SlidersHorizontal,
+  Layers,
 } from "lucide-react";
 import HubPage from "./HubPage";
-import RealizacjePage from "./RealizacjePage";
+import RealizacjePage, { projectObjects } from "./RealizacjePage";
+import { assetPath } from "./utils";
 
 const PHONE = "+48 513 666 450";
 const EMAIL = "kontakt@zielonyzajac.pl";
@@ -95,17 +96,6 @@ const PACKAGES = [
   },
 ];
 
-const MARQUEE_PHOTOS = [
-  { src: "/realizacje/foto-1.jpeg", title: "Mokotów • Gree Pular 3.2 kW" },
-  { src: "/realizacje/foto-2.jpeg", title: "Wola • Montaż w nowym bloku" },
-  { src: "/realizacje/foto-3.jpeg", title: "Wilanów • Klimatyzator ścienny" },
-  { src: "/realizacje/foto-4.jpeg", title: "Ursynów • Złoty panel premium" },
-  { src: "/realizacje/foto-5.jpeg", title: "Białołęka • Agregat na balkonie" },
-  { src: "/realizacje/foto-6.jpeg", title: "Bemowo • Czyste wykończenie" },
-  { src: "/realizacje/foto-7.jpeg", title: "Ochota • Bezpyłowe wiercenie" },
-  { src: "/realizacje/foto-8.jpeg", title: "Piaseczno • Multi-split w domu" },
-];
-
 const DISTRICTS = [
   "Mokotów", "Wola", "Ursynów", "Wilanów", "Bemowo", "Białołęka",
   "Bielany", "Ochota", "Targówek", "Praga-Południe", "Praga-Północ",
@@ -117,8 +107,9 @@ export default function App() {
   const [currentView, setCurrentView] = useState("main"); // 'main', 'hub', 'realizacje'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roomTemp, setRoomTemp] = useState(21); // 18, 21, 24
+  const [hoveredMarqueeId, setHoveredMarqueeId] = useState(null);
 
-  // Listen to hash routes e.g. #/hub, #/realizacje
+  // Listen to hash routes
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash;
@@ -151,18 +142,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-emerald-500 selection:text-white">
-      {/* Top Banner (Working Hours & Local Notice) */}
-      <div className="bg-emerald-900 text-emerald-100 text-xs py-2 px-4 border-b border-emerald-800">
+      {/* Top Banner */}
+      <div className="bg-emerald-950 text-emerald-100 text-xs py-2 px-4 border-b border-emerald-900">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Warszawa i okolice • Wolne terminy montażu na bieżący tydzień</span>
+            <span>Warszawa i Mazowsze • Wolne terminy na bieżący tydzień</span>
           </div>
           <div className="flex items-center gap-4 text-emerald-200">
             <span>Pn–Pt: 8:00–18:00 | Sob: 9:00–15:00</span>
             <button
               onClick={() => navigateTo("hub")}
-              className="text-white hover:text-emerald-300 font-semibold underline underline-offset-2 transition"
+              className="text-white hover:text-emerald-300 font-bold underline underline-offset-2 transition"
             >
               Wersja Mobilna QR
             </button>
@@ -178,21 +169,12 @@ export default function App() {
             onClick={() => navigateTo("main")}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 p-1.5 border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition">
+            <div className="h-12 w-auto flex items-center justify-center group-hover:scale-105 transition">
               <img
-                src="/zielony-zajac-logo.svg"
+                src={assetPath("/zielony-zajac-logo.svg")}
                 alt="Zielony Zając"
-                className="h-full w-full object-contain"
+                className="h-11 w-auto object-contain"
               />
-            </div>
-            <div>
-              <div className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
-                Zielony Zając
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  Klimatyzacja
-                </span>
-              </div>
-              <div className="text-xs text-slate-500 font-medium">Warszawa i okolice</div>
             </div>
           </div>
 
@@ -356,10 +338,10 @@ export default function App() {
                 <img
                   src={
                     roomTemp === 18 
-                      ? "/hero-cool-room.png" 
+                      ? assetPath("/hero-cool-room.png") 
                       : roomTemp === 24 
-                      ? "/hero-hot-room.png" 
-                      : "/hero-airflow-room.png"
+                      ? assetPath("/hero-hot-room.png") 
+                      : assetPath("/hero-airflow-room.png")
                   }
                   alt="Komfort w pomieszczeniu"
                   className="w-full h-full object-cover transition-all duration-500"
@@ -394,7 +376,7 @@ export default function App() {
               {/* Temperature Control Buttons */}
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Sprawdź efekt chłodzenia:
+                  Efekt chłodzenia:
                 </span>
                 <div className="flex gap-2">
                   {[
@@ -421,12 +403,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* Brands Ticker (Client specified brands) */}
+      {/* Brands Ticker */}
       <section className="border-y border-slate-200/80 bg-slate-50/70 py-8 px-4 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-5">
             <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-800">
-              Pracujemy wyłącznie na sprawdzonych markach
+              Pracujemy wyłącznie na sprawdzonych markach klimatyzatorów
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
@@ -445,7 +427,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Scope of Services (Zakres Usług - without heat pumps) */}
+      {/* Scope of Services */}
       <section id="oferta" className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -523,7 +505,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* 3. Biura i Lokale */}
+            {/* 3. Biura */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
@@ -533,7 +515,7 @@ export default function App() {
                   Biura i Lokale Usługowe
                 </h3>
                 <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                  Klimatyzatory kasetonowe, kanałowe i podsufitowe dla sklepów, gabinetów, restauracji i biur. Praca w dogodnych godzinach bez zakłócania biznesu.
+                  Klimatyzatory ścienne i kasetonowe dla gabinetów, salonów urody, sklepów i biur. Praca w dogodnych godzinach bez zakłócania pracy personelu.
                 </p>
                 <ul className="mt-4 space-y-2 text-xs font-semibold text-slate-700">
                   <li className="flex items-center gap-1.5">
@@ -554,7 +536,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* 4. Serwis i Odgrzybianie */}
+            {/* 4. Serwis */}
             <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xl transition flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-5 group-hover:scale-110 transition">
@@ -569,7 +551,7 @@ export default function App() {
                 <ul className="mt-4 space-y-2 text-xs font-semibold text-slate-700">
                   <li className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    Usunięcie pleśni, bakterii i grzybów
+                    Usunięcie pleśni i bakterii
                   </li>
                   <li className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
@@ -588,7 +570,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Marquee Realizations (After Services) */}
+      {/* Marquee Realizations Accordion Preview (Directly after Services) */}
       <section className="py-14 bg-slate-900 text-white overflow-hidden relative">
         <div className="max-w-6xl mx-auto px-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
@@ -597,38 +579,54 @@ export default function App() {
               Nasze Realizacje • Zdjęcia z montaży w Warszawie
             </div>
             <h2 className="text-2xl sm:text-3xl font-black mt-1">
-              Zobacz, jak czysto montujemy klimatyzatory
+              Zobacz wykonane realizacje z harmonijką ujęć
             </h2>
           </div>
           <button
             onClick={() => navigateTo("realizacje")}
             className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition flex items-center gap-2 whitespace-nowrap"
           >
-            Zobacz wszystkie zdjęcia (80+)
+            Wszystkie obiekty i zdjęcia (80+)
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Scrolling Cards Marquee */}
+        {/* Scrolling Cards Accordion Preview */}
         <div className="relative w-full overflow-x-auto no-scrollbar py-2">
-          <div className="flex gap-4 px-4 min-w-max">
-            {MARQUEE_PHOTOS.map((item, idx) => (
+          <div className="flex gap-5 px-4 min-w-max">
+            {projectObjects.map((obj) => (
               <div
-                key={idx}
+                key={obj.id}
                 onClick={() => navigateTo("realizacje")}
+                onMouseEnter={() => setHoveredMarqueeId(obj.id)}
+                onMouseLeave={() => setHoveredMarqueeId(null)}
                 className="group relative w-72 sm:w-80 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700/60 shadow-lg cursor-pointer transform hover:-translate-y-1 transition duration-300"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-slate-950">
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-950">
                   <img
-                    src={item.src}
-                    alt={item.title}
+                    src={obj.photos[0]}
+                    alt={obj.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     loading="lazy"
                   />
+                  {/* Mini floating accordion previews on hover */}
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-slate-950/80 backdrop-blur-md p-1 rounded-xl border border-white/10">
+                    <div className="flex gap-1">
+                      {obj.photos.slice(0, 3).map((p, idx) => (
+                        <div key={idx} className="w-6 h-6 rounded-md overflow-hidden border border-white/30">
+                          <img src={p} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+                      <Layers className="w-3 h-3" />
+                      {obj.photos.length} zdjęcia
+                    </span>
+                  </div>
                 </div>
                 <div className="p-3 bg-slate-800/95 flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-200">{item.title}</span>
-                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-0.5">
+                  <span className="text-xs font-bold text-slate-200 line-clamp-1">{obj.title}</span>
+                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-0.5 ml-2 flex-shrink-0">
                     Otwórz <ExternalLink className="w-3 h-3" />
                   </span>
                 </div>
@@ -789,7 +787,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Warsaw Districts SEO Section (Dzielnice) */}
+      {/* Warsaw Districts SEO Section */}
       <section id="dzielnice" className="py-16 px-4 bg-slate-50 border-t border-slate-200">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -853,12 +851,11 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-4 text-xs border-t border-slate-800">
+      <footer className="bg-slate-950 text-slate-400 py-12 px-4 text-xs border-t border-slate-800">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <img src="/zielony-zajac-logo.svg" alt="Logo" className="h-8 w-auto filter invert brightness-200" />
-              <span className="font-extrabold text-white text-base">Zielony Zając</span>
+              <img src={assetPath("/zielony-zajac-logo.svg")} alt="Logo" className="h-9 w-auto filter brightness-200" />
             </div>
             <p className="text-slate-400 leading-relaxed">
               Zielony Zając Sp. z o.o.<br />
@@ -906,7 +903,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Floating Sticky Call Button (Client priority: direct calls) */}
+      {/* Floating Sticky Call Button */}
       <div className="fixed bottom-5 right-5 z-50">
         <a
           href={`tel:${PHONE.replace(/\s+/g, "")}`}

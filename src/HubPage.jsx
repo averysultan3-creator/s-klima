@@ -1,5 +1,6 @@
 import React from "react";
-import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock } from "lucide-react";
+import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
+import { assetPath } from "./utils";
 
 export default function HubPage({ onGoToSite, onGoToRealizacje }) {
   const phone = "+48 513 666 450";
@@ -7,15 +8,15 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
   const googleMapsUrl = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col justify-between relative overflow-hidden font-sans selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-between relative overflow-hidden font-sans selection:bg-emerald-500 selection:text-white">
       {/* Background with Air Conditioner ambience */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/hero-cool-room.png"
+          src={assetPath("/hero-cool-room.png")}
           alt="Komfortowy chłód"
           className="w-full h-full object-cover opacity-20 filter blur-[2px] scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/90 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/95 to-slate-950" />
       </div>
 
       {/* Subtle cooling glow effect */}
@@ -25,21 +26,21 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
       <div className="relative z-10 w-full max-w-md mx-auto px-5 py-8 flex-1 flex flex-col justify-center">
         {/* Logo and Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl mb-4">
+          <div className="inline-flex items-center justify-center p-3.5 bg-white rounded-3xl border border-white/20 shadow-2xl mb-4">
             <img
-              src="/zielony-zajac-logo.svg"
+              src={assetPath("/zielony-zajac-logo.svg")}
               alt="Zielony Zając"
-              className="h-12 w-auto filter drop-shadow-md"
+              className="h-12 w-auto object-contain"
             />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-2">
             Zielony Zając
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               Warszawa
             </span>
           </h1>
           <p className="text-sm text-slate-300 mt-1 font-medium">
-            Profesjonalny montaż i serwis klimatyzacji
+            Montaż i serwis klimatyzacji w 1 dzień
           </p>
 
           <div className="flex items-center justify-center gap-4 mt-3 text-xs text-slate-400 font-medium">
@@ -95,7 +96,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
                   </span>
                 </div>
                 <div className="text-xs text-slate-300 group-hover:text-emerald-100">
-                  Zobacz oceny naszych zadowolonych klientów
+                  Zobacz oceny naszych klientów w Google Maps
                 </div>
               </div>
             </div>
@@ -123,8 +124,8 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
 
           {/* 4. Kontakt Bezpośredni */}
           <div className="p-4 rounded-2xl bg-emerald-600 border border-emerald-400 shadow-xl text-white">
-            <div className="text-xs uppercase font-bold tracking-wider text-emerald-200 mb-2">
-              Szybki kontakt z instalatorem
+            <div className="text-xs uppercase font-extrabold tracking-wider text-emerald-100 mb-2">
+              Szybki kontakt telefoniczny
             </div>
             <div className="grid grid-cols-2 gap-2">
               <a
@@ -136,7 +137,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
               </a>
               <a
                 href={`mailto:${email}`}
-                className="py-3 px-3 rounded-xl bg-emerald-700/80 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-emerald-700 transition border border-emerald-400/40"
+                className="py-3 px-3 rounded-xl bg-emerald-700 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-emerald-800 transition border border-emerald-400/40"
               >
                 <Mail className="w-4 h-4" />
                 Napisz
@@ -151,7 +152,7 @@ export default function HubPage({ onGoToSite, onGoToRealizacje }) {
         {/* Footer info */}
         <div className="mt-8 text-center text-[11px] text-slate-400">
           <div>Zielony Zając Sp. z o.o. • NIP: 1133216745</div>
-          <div className="mt-0.5">Warszawa i całe województwo mazowieckie</div>
+          <div className="mt-0.5">Warszawa i województwo mazowieckie</div>
         </div>
       </div>
     </div>
