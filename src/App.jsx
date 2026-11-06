@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import HubPage from "./HubPage";
 import RealizacjePage, { projectObjects } from "./RealizacjePage";
+import HeroVisualRoom from "./HeroVisualRoom";
 import { assetPath } from "./utils";
 
 const PHONE = "+48 513 666 450";
@@ -363,73 +364,7 @@ export default function App() {
 
           {/* Right Interactive Cooling Room Component */}
           <div className="lg:col-span-5 relative">
-            <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-2xl p-4 sm:p-5 overflow-hidden">
-              {/* Room Illustration with switchable temperature */}
-              <div className="relative rounded-2xl aspect-[4/3] overflow-hidden bg-slate-100 border border-slate-100">
-                <img
-                  src={
-                    roomTemp === 18 
-                      ? assetPath("/hero-cool-room.png") 
-                      : roomTemp === 24 
-                      ? assetPath("/hero-hot-room.png") 
-                      : assetPath("/hero-airflow-room.png")
-                  }
-                  alt="Komfort w pomieszczeniu"
-                  className="w-full h-full object-cover transition-all duration-500"
-                />
-
-                {/* Status Badges on Image */}
-                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/50 shadow-sm text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <Wind className="w-4 h-4 text-emerald-600 animate-spin" />
-                  dobór mocy + montaż + serwis
-                </div>
-
-                <div className="absolute top-3 right-3 bg-emerald-600/95 backdrop-blur-md text-white px-3 py-1 rounded-xl shadow-md text-[11px] font-bold">
-                  Komfort gotowy
-                </div>
-
-                {/* Temperature overlay pill */}
-                <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg border border-slate-100 flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${roomTemp <= 21 ? 'bg-cyan-100 text-cyan-700' : 'bg-amber-100 text-amber-700'}`}>
-                    {roomTemp <= 21 ? <Snowflake className="w-5 h-5 animate-pulse" /> : <Flame className="w-5 h-5" />}
-                  </div>
-                  <div>
-                    <div className="text-xl font-black text-slate-900 leading-none">
-                      {roomTemp}°C
-                    </div>
-                    <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-0.5">
-                      {roomTemp === 18 ? "Mocne chłodzenie" : roomTemp === 21 ? "Optymalny komfort" : "Ciepły nawiew"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Temperature Control Buttons */}
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Efekt chłodzenia:
-                </span>
-                <div className="flex gap-2">
-                  {[
-                    { temp: 18, label: "18°C Chłód" },
-                    { temp: 21, label: "21°C Eko" },
-                    { temp: 24, label: "24°C Grzanie" },
-                  ].map((btn) => (
-                    <button
-                      key={btn.temp}
-                      onClick={() => setRoomTemp(btn.temp)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
-                        roomTemp === btn.temp
-                          ? "bg-emerald-600 text-white shadow"
-                          : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                      }`}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <HeroVisualRoom />
           </div>
         </div>
       </section>
