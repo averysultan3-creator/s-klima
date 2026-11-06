@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 45" fill="none">
+  <g transform="translate(10, 8)">
+    <!-- Three red diamonds of Mitsubishi -->
+    <polygon points="14,0 20,10 14,20 8,10" fill="#E60012" />
+    <polygon points="5,15 11,25 5,35 -1,25" fill="#E60012" transform="translate(4, -5) rotate(60, 5, 25)" />
+    <polygon points="23,15 29,25 23,35 17,25" fill="#E60012" transform="translate(-4, -5) rotate(-60, 23, 25)" />
+  </g>
+  <text x="50" y="22" font-family="'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="900" fill="#E60012" letter-spacing="0.5">MITSUBISHI</text>
+  <text x="50" y="34" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700" fill="#1A1A1A" letter-spacing="1.2">ELECTRIC</text>
+</svg>
