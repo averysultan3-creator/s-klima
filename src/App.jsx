@@ -252,7 +252,7 @@ export default function App() {
           <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
             <a href="#oferta" className="hover:text-emerald-600 transition">Zakres Usług</a>
             <button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-600 transition cursor-pointer">
-              Realizacje (80+)
+              Realizacje
             </button>
             <a href="#dlaczego-my" className="hover:text-emerald-600 transition">Dlaczego My</a>
             <a
@@ -300,7 +300,7 @@ export default function App() {
               onClick={() => { setMobileMenuOpen(false); navigateTo("realizacje"); }}
               className="block text-left w-full text-base font-semibold text-slate-700 py-1"
             >
-              Realizacje (80+ zdjęć)
+              Realizacje
             </button>
             <a
               href="#dlaczego-my"

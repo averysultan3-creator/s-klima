@@ -161,7 +161,7 @@ export default function WizytowkaPage({ onBack }) {
                   {/* Subtle Emerald Top Accent Line (2.5mm) */}
                   <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600" />
                   
-                  {/* Top Row: Logo & Certification Badge */}
+                  {/* Top Row: Logo */}
                   <div className="flex items-start justify-between">
                     <div>
                       <img
@@ -172,13 +172,6 @@ export default function WizytowkaPage({ onBack }) {
                       <div className="mt-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-emerald-700">
                         Montaż i Serwis Klimatyzacji
                       </div>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[10px] sm:text-xs font-bold border border-emerald-200">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                        Certyfikat F-Gaz UDT
-                      </span>
                     </div>
                   </div>
 
@@ -192,31 +185,31 @@ export default function WizytowkaPage({ onBack }) {
                     </p>
                   </div>
 
-                  {/* Bottom: Contact Details (Strict Black & Emerald) */}
+                  {/* Bottom: Contact Details (Strict Corporate Black & Emerald) */}
                   <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-slate-200 text-[11px] sm:text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                      <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-200/60">
                         <Phone className="w-3 h-3 text-emerald-700" />
                       </div>
-                      <span className="font-black text-slate-900">{PHONE}</span>
+                      <span className="font-black text-slate-900 tracking-tight">{PHONE}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                      <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-200/60">
                         <Globe className="w-3 h-3 text-emerald-700" />
                       </div>
                       <span className="font-bold text-slate-800 truncate">{WEBSITE}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                      <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-200/60">
                         <Mail className="w-3 h-3 text-emerald-700" />
                       </div>
                       <span className="font-semibold text-slate-700 truncate">{EMAIL}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                      <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-200/60">
                         <MapPin className="w-3 h-3 text-emerald-700" />
                       </div>
                       <span className="font-semibold text-slate-700 truncate">Warszawa i Mazowsze</span>
@@ -295,7 +288,7 @@ export default function WizytowkaPage({ onBack }) {
                         </li>
                         <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                          <span>Galerię ponad 80 montaży w Warszawie</span>
+                          <span>Galerię ponad 100 montaży w Warszawie</span>
                         </li>
                         <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
