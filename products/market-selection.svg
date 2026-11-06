@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Dobor z marketu">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6fff9"/>
+      <stop offset="1" stop-color="#fff7e8"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0a493b" flood-opacity=".16"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="34" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <rect x="86" y="94" width="468" height="128" rx="30" fill="#fff"/>
+    <path d="M126 136h388" stroke="#edf5f3" stroke-width="16" stroke-linecap="round"/>
+    <path d="M138 178h364" stroke="#0c2e26" stroke-opacity=".2" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <rect x="430" y="70" width="94" height="62" rx="18" fill="#10a56a" opacity=".16"/>
+  <path d="M454 98h46M464 84h26" stroke="#05724c" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+  <path d="M172 256c68-32 138-32 210 0" fill="none" stroke="#36b8f2" stroke-width="9" stroke-linecap="round" opacity=".26"/>
+  <text x="88" y="288" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900" fill="#0c2e26">Dobor z marketu</text>
+  <text x="88" y="319" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#05724c">EURO / Media Expert / sklep klienta</text>
+</svg>
