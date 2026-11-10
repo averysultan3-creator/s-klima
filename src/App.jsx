@@ -681,9 +681,6 @@ export default function App() {
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
                 Przejrzyste Ceny Montażu i Serwisu
               </h2>
-              <p className="mt-3 text-emerald-100 text-sm sm:text-base leading-relaxed">
-                Montaż standardowy split już od <strong>1 600 zł netto</strong> (+8% VAT). Systemy MultiSplit, prace budowlane, przewierty w żelbecie i pełny serwis odgrzybiania.
-              </p>
               <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-200">
                 <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Do 3m instalacji w cenie</span>
                 <span>•</span>
@@ -788,7 +785,7 @@ export default function App() {
             {[
               {
                 q: "Ile trwa standardowy montaż klimatyzacji w mieszkaniu?",
-                a: "Zazwyczaj od 3 do 5 godzin. Przyjeżdżamy rano z kompletem sprzętu i odkurzaczem przemysłowym. Po południu instalacja jest sprawdzona ciśnieniowo, uruchomiona i gotowa do pracy.",
+                a: "Zazwyczaj od 3 do 5 godzin.",
               },
               {
                 q: "Czy montaż zniszczy wyremontowane ściany?",
@@ -804,11 +801,11 @@ export default function App() {
               },
               {
                 q: "Co ile należy wykonywać serwis i odgrzybianie?",
-                a: "Zalecamy przegląd minimum raz w roku (najlepiej na wiosnę przed sezonem upałów). Obejmuje on dezynfekcję parową parownika, czyszczenie filtrów z atestem PZH, sprawdzenie odpływu skroplin i ciśnienia czynnika R32. Regularny serwis jest też warunkiem utrzymania 5-letniej gwarancji.",
+                a: "Zalecamy przegląd minimum raz w roku (najlepiej na wiosnę przed sezonem upałów).",
               },
               {
                 q: "Czy klimatyzatorem można ogrzewać mieszkanie w zimie?",
-                a: "Tak, wszystkie montowane przez nas modele (Gree, Daikin, LG, Samsung, Mitsubishi) posiadają funkcję pompy ciepła powietrze-powietrze i działają w trybie grzania nawet przy temperaturach zewnętrznych do -20°C / -25°C, będąc bardzo ekonomicznym źródłem ciepła w okresie jesienno-zimowym.",
+                a: "Tak, wszystkie montowane przez nas modele działają w trybie grzania nawet przy temperaturach zewnętrznych do -20°C / -25°C, będąc bardzo ekonomicznym źródłem ciepła w okresie jesienno-zimowym.",
               },
             ].map((faq, idx) => (
               <details
@@ -913,8 +910,7 @@ export default function App() {
             </div>
             <p className="text-slate-400 leading-relaxed">
               Zielony Zając Sp. z o.o.<br />
-              NIP: 1133216745<br />
-              Profesjonalny montaż, serwis i odgrzybianie klimatyzacji na terenie Warszawy i Mazowsza.
+              NIP: 1133216745
             </p>
           </div>
 
@@ -960,8 +956,6 @@ export default function App() {
             >
               Polityka Prywatności i RODO
             </button>
-            <span>•</span>
-            <span>Domenę obsługuje Cyberfolks</span>
           </div>
         </div>
       </footer>
