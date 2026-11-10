@@ -233,17 +233,17 @@ export default function App() {
 
       {/* Main Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 h-24 flex items-center justify-between">
           {/* Authentic Logo */}
           <div 
             onClick={() => navigateTo("main")}
             className="flex items-center cursor-pointer group"
           >
-            <div className="h-14 w-auto flex items-center group-hover:scale-105 transition">
+            <div className="h-20 w-auto flex items-center group-hover:scale-105 transition">
               <img
                 src={assetPath("/zielony-zajac-logo.jpg")}
                 alt="Zielony Zając"
-                className="h-12 w-auto object-contain rounded-lg"
+                className="h-16 sm:h-20 w-auto object-contain rounded-xl shadow-xs"
               />
             </div>
           </div>
@@ -908,8 +908,8 @@ export default function App() {
       <footer className="bg-slate-950 text-slate-400 py-12 px-4 text-xs border-t border-slate-800">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <img src={assetPath("/zielony-zajac-logo.jpg")} alt="Logo" className="h-10 w-auto rounded" />
+            <div className="flex items-center gap-2 mb-4">
+              <img src={assetPath("/zielony-zajac-logo.jpg")} alt="Logo Zielony Zając" className="h-16 w-auto rounded-xl bg-white p-1" />
             </div>
             <p className="text-slate-400 leading-relaxed">
               Zielony Zając Sp. z o.o.<br />

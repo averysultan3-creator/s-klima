@@ -132,6 +132,22 @@ export const projectObjects = [
     ],
     features: ["Precyzyjne nawiewy 3D", "Smart Home integracja", "Niski pobór prądu"],
   },
+  {
+    id: "obj-9",
+    title: "Agregat na wibroizolatorach na balkonie apartamentowca",
+    location: "Warszawa, Mokotów / Wilanów",
+    category: "mieszkanie",
+    date: "Listopad 2026",
+    duration: "4 godziny",
+    desc: "Czysty montaż jednostki zewnętrznej na dedykowanych stopach antywibracyjnych. Estetyczne prowadzenie instalacji chłodniczej, odprowadzenie skroplin i próżnia układu.",
+    photos: [
+      assetPath("/realizacje/foto-81.jpeg"),
+      assetPath("/realizacje/foto-82.jpeg"),
+      assetPath("/realizacje/foto-83.jpeg"),
+      assetPath("/realizacje/foto-84.jpeg"),
+    ],
+    features: ["Stopy antywibracyjne", "Bezpyłowy montaż", "Test szczelności azotem"],
+  },
 ];
 
 export default function RealizacjePage({ onBack, onOpenOrder }) {

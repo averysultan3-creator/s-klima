@@ -167,7 +167,7 @@ export default function WizytowkaPage({ onBack }) {
                       <img
                         src={assetPath("/zielony-zajac-logo.jpg")}
                         alt="Zielony Zając"
-                        className="h-11 sm:h-12 w-auto object-contain rounded"
+                        className="h-14 sm:h-16 w-auto object-contain rounded"
                       />
                       <div className="mt-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-emerald-700">
                         Montaż i Serwis Klimatyzacji

@@ -26,11 +26,11 @@ export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) 
       <div className="relative z-10 w-full max-w-md mx-auto px-5 py-8 flex-1 flex flex-col justify-center">
         {/* Logo and Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-white rounded-3xl border border-white/20 shadow-2xl mb-4">
+          <div className="inline-flex items-center justify-center p-4 bg-white rounded-3xl border border-white/20 shadow-2xl mb-4">
             <img
               src={assetPath("/zielony-zajac-logo.jpg")}
               alt="Zielony Zając"
-              className="h-14 w-auto object-contain rounded-xl"
+              className="h-20 sm:h-24 w-auto object-contain rounded-2xl"
             />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-2">
