@@ -11,6 +11,7 @@ import {
   ExternalLink,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   Star,
   Zap,
   Snowflake,
@@ -119,6 +120,38 @@ const DISTRICTS = [
   "Nieporęt", "Pruszków", "Piastów", "Michałowice", "Raszyn", "Nadarzyn",
   "Lesznowola", "Halinów", "Błonie", "Brwinów",
 ];
+
+// Only the first 2 places are visible; the rest opens with a button.
+const DISTRICTS_VISIBLE = 2;
+function DistrictList() {
+  const [open, setOpen] = useState(false);
+  const places = open ? DISTRICTS : DISTRICTS.slice(0, DISTRICTS_VISIBLE);
+  return (
+    <>
+      <ul
+        id="district-list"
+        className={`mt-8 grid grid-cols-2 gap-x-6 gap-y-2.5 text-left mx-auto ${open ? "sm:grid-cols-3 md:grid-cols-4 max-w-3xl" : "max-w-md"}`}
+      >
+        {places.map((place) => (
+          <li key={place} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+            {place}
+          </li>
+        ))}
+      </ul>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="district-list"
+        className="mt-6 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-emerald-200 bg-white text-emerald-700 text-sm font-bold hover:bg-emerald-50 transition"
+      >
+        {open ? "Zwiń listę" : `Pokaż wszystkie miejscowości (${DISTRICTS.length})`}
+        <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+    </>
+  );
+}
 
 const FacebookIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -824,14 +857,7 @@ export default function App() {
           <p className="mt-3 text-emerald-700 text-base sm:text-lg font-black">
             Darmowa wycena: Warszawa + 30 km od centrum
           </p>
-          <ul className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-2.5 text-left max-w-3xl mx-auto">
-            {DISTRICTS.map((place) => (
-              <li key={place} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                {place}
-              </li>
-            ))}
-          </ul>
+          <DistrictList />
         </div>
       </section>
 
