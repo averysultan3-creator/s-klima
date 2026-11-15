@@ -1926,3 +1926,14 @@ input[type="number"]:focus,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---- Exact-size printing (business card, banners) ---- */
+#print-root { display: none; }
+@media print {
+  body.printing-sheets #root { display: none !important; }
+  body.printing-sheets #print-root { display: block; }
+  body.printing-sheets { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  #print-root > * { break-after: page; page-break-after: always; }
+  #print-root > *:last-child { break-after: auto; page-break-after: auto; }
+  #print-root, #print-root * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

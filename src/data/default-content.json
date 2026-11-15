@@ -1,0 +1,514 @@
+{
+ "version": 1,
+ "photos": {
+  "wewnatrz": [
+   {
+    "id": "foto-1",
+    "src": "realizacje/foto-1.jpeg"
+   },
+   {
+    "id": "foto-2",
+    "src": "realizacje/foto-2.jpeg"
+   },
+   {
+    "id": "foto-3",
+    "src": "realizacje/foto-3.jpeg"
+   },
+   {
+    "id": "foto-4",
+    "src": "realizacje/foto-4.jpeg"
+   },
+   {
+    "id": "foto-5",
+    "src": "realizacje/foto-5.jpeg"
+   },
+   {
+    "id": "foto-6",
+    "src": "realizacje/foto-6.jpeg"
+   },
+   {
+    "id": "foto-7",
+    "src": "realizacje/foto-7.jpeg"
+   },
+   {
+    "id": "foto-9",
+    "src": "realizacje/foto-9.jpeg"
+   },
+   {
+    "id": "foto-10",
+    "src": "realizacje/foto-10.jpeg"
+   },
+   {
+    "id": "foto-11",
+    "src": "realizacje/foto-11.jpeg"
+   },
+   {
+    "id": "foto-12",
+    "src": "realizacje/foto-12.jpeg"
+   },
+   {
+    "id": "foto-17",
+    "src": "realizacje/foto-17.jpeg"
+   },
+   {
+    "id": "foto-19",
+    "src": "realizacje/foto-19.jpeg"
+   },
+   {
+    "id": "foto-20",
+    "src": "realizacje/foto-20.jpeg"
+   },
+   {
+    "id": "foto-21",
+    "src": "realizacje/foto-21.jpeg"
+   },
+   {
+    "id": "foto-24",
+    "src": "realizacje/foto-24.jpeg"
+   },
+   {
+    "id": "foto-25",
+    "src": "realizacje/foto-25.jpeg"
+   },
+   {
+    "id": "foto-27",
+    "src": "realizacje/foto-27.jpeg"
+   },
+   {
+    "id": "foto-30",
+    "src": "realizacje/foto-30.jpeg"
+   },
+   {
+    "id": "foto-31",
+    "src": "realizacje/foto-31.jpeg"
+   },
+   {
+    "id": "foto-32",
+    "src": "realizacje/foto-32.jpeg"
+   },
+   {
+    "id": "foto-33",
+    "src": "realizacje/foto-33.jpeg"
+   },
+   {
+    "id": "foto-34",
+    "src": "realizacje/foto-34.jpeg"
+   },
+   {
+    "id": "foto-37",
+    "src": "realizacje/foto-37.jpeg"
+   },
+   {
+    "id": "foto-38",
+    "src": "realizacje/foto-38.jpeg"
+   },
+   {
+    "id": "foto-43",
+    "src": "realizacje/foto-43.jpeg"
+   },
+   {
+    "id": "foto-44",
+    "src": "realizacje/foto-44.jpeg"
+   },
+   {
+    "id": "foto-46",
+    "src": "realizacje/foto-46.jpeg"
+   },
+   {
+    "id": "foto-47",
+    "src": "realizacje/foto-47.jpeg"
+   },
+   {
+    "id": "foto-51",
+    "src": "realizacje/foto-51.jpeg"
+   },
+   {
+    "id": "foto-52",
+    "src": "realizacje/foto-52.jpeg"
+   },
+   {
+    "id": "foto-53",
+    "src": "realizacje/foto-53.jpeg"
+   },
+   {
+    "id": "foto-55",
+    "src": "realizacje/foto-55.jpeg"
+   },
+   {
+    "id": "foto-56",
+    "src": "realizacje/foto-56.jpeg"
+   },
+   {
+    "id": "foto-57",
+    "src": "realizacje/foto-57.jpeg"
+   },
+   {
+    "id": "foto-59",
+    "src": "realizacje/foto-59.jpeg"
+   },
+   {
+    "id": "foto-60",
+    "src": "realizacje/foto-60.jpeg"
+   },
+   {
+    "id": "foto-61",
+    "src": "realizacje/foto-61.jpeg"
+   },
+   {
+    "id": "foto-62",
+    "src": "realizacje/foto-62.jpeg"
+   },
+   {
+    "id": "foto-63",
+    "src": "realizacje/foto-63.jpeg"
+   },
+   {
+    "id": "foto-64",
+    "src": "realizacje/foto-64.jpeg"
+   },
+   {
+    "id": "foto-65",
+    "src": "realizacje/foto-65.jpeg"
+   },
+   {
+    "id": "foto-66",
+    "src": "realizacje/foto-66.jpeg"
+   },
+   {
+    "id": "foto-67",
+    "src": "realizacje/foto-67.jpeg"
+   },
+   {
+    "id": "foto-73",
+    "src": "realizacje/foto-73.jpeg"
+   },
+   {
+    "id": "foto-77",
+    "src": "realizacje/foto-77.jpeg"
+   },
+   {
+    "id": "foto-78",
+    "src": "realizacje/foto-78.jpeg"
+   },
+   {
+    "id": "foto-79",
+    "src": "realizacje/foto-79.jpeg"
+   },
+   {
+    "id": "foto-80",
+    "src": "realizacje/foto-80.jpeg"
+   }
+  ],
+  "zewnatrz": [
+   {
+    "id": "foto-13",
+    "src": "realizacje/foto-13.jpeg"
+   },
+   {
+    "id": "foto-14",
+    "src": "realizacje/foto-14.jpeg"
+   },
+   {
+    "id": "foto-15",
+    "src": "realizacje/foto-15.jpeg"
+   },
+   {
+    "id": "foto-16",
+    "src": "realizacje/foto-16.jpeg"
+   },
+   {
+    "id": "foto-18",
+    "src": "realizacje/foto-18.jpeg"
+   },
+   {
+    "id": "foto-22",
+    "src": "realizacje/foto-22.jpeg"
+   },
+   {
+    "id": "foto-23",
+    "src": "realizacje/foto-23.jpeg"
+   },
+   {
+    "id": "foto-26",
+    "src": "realizacje/foto-26.jpeg"
+   },
+   {
+    "id": "foto-28",
+    "src": "realizacje/foto-28.jpeg"
+   },
+   {
+    "id": "foto-29",
+    "src": "realizacje/foto-29.jpeg"
+   },
+   {
+    "id": "foto-35",
+    "src": "realizacje/foto-35.jpeg"
+   },
+   {
+    "id": "foto-36",
+    "src": "realizacje/foto-36.jpeg"
+   },
+   {
+    "id": "foto-39",
+    "src": "realizacje/foto-39.jpeg"
+   },
+   {
+    "id": "foto-40",
+    "src": "realizacje/foto-40.jpeg"
+   },
+   {
+    "id": "foto-41",
+    "src": "realizacje/foto-41.jpeg"
+   },
+   {
+    "id": "foto-42",
+    "src": "realizacje/foto-42.jpeg"
+   },
+   {
+    "id": "foto-45",
+    "src": "realizacje/foto-45.jpeg"
+   },
+   {
+    "id": "foto-48",
+    "src": "realizacje/foto-48.jpeg"
+   },
+   {
+    "id": "foto-49",
+    "src": "realizacje/foto-49.jpeg"
+   },
+   {
+    "id": "foto-50",
+    "src": "realizacje/foto-50.jpeg"
+   },
+   {
+    "id": "foto-54",
+    "src": "realizacje/foto-54.jpeg"
+   },
+   {
+    "id": "foto-58",
+    "src": "realizacje/foto-58.jpeg"
+   },
+   {
+    "id": "foto-68",
+    "src": "realizacje/foto-68.jpeg"
+   },
+   {
+    "id": "foto-69",
+    "src": "realizacje/foto-69.jpeg"
+   },
+   {
+    "id": "foto-70",
+    "src": "realizacje/foto-70.jpeg"
+   },
+   {
+    "id": "foto-71",
+    "src": "realizacje/foto-71.jpeg"
+   },
+   {
+    "id": "foto-72",
+    "src": "realizacje/foto-72.jpeg"
+   },
+   {
+    "id": "foto-74",
+    "src": "realizacje/foto-74.jpeg"
+   },
+   {
+    "id": "foto-75",
+    "src": "realizacje/foto-75.jpeg"
+   },
+   {
+    "id": "foto-76",
+    "src": "realizacje/foto-76.jpeg"
+   },
+   {
+    "id": "foto-81",
+    "src": "realizacje/foto-81.jpeg"
+   },
+   {
+    "id": "foto-82",
+    "src": "realizacje/foto-82.jpeg"
+   },
+   {
+    "id": "foto-83",
+    "src": "realizacje/foto-83.jpeg"
+   },
+   {
+    "id": "foto-84",
+    "src": "realizacje/foto-84.jpeg"
+   }
+  ],
+  "bruzdowanie": [
+   {
+    "id": "foto-8",
+    "src": "realizacje/foto-8.jpeg"
+   }
+  ]
+ },
+ "cennik": {
+  "sections": [
+   {
+    "id": "split",
+    "title": "Montaż klimatyzacji Split",
+    "subtitle": "Ceny netto (dla osób prywatnych +8% VAT)",
+    "items": [
+     {
+      "name": "Montaż klimatyzacji do 3,5 kW",
+      "price": "1 600 zł",
+      "note": "do mieszkań i mniejszych salonów"
+     },
+     {
+      "name": "Montaż klimatyzacji 5,0–7,0 kW",
+      "price": "1 800 zł",
+      "note": "do dużych salonów i otwartych przestrzeni"
+     },
+     {
+      "name": "Montaż klimatyzacji powyżej 7,0 kW",
+      "price": "od 2 000 zł",
+      "note": "duże domy i lokale usługowe"
+     },
+     {
+      "name": "Montaż urządzenia na gotowej instalacji",
+      "price": "od 1 000 zł",
+      "note": "gdy rury i kable są już w ścianie"
+     },
+     {
+      "name": "Montaż klimatyzacji zakupionej przez klienta",
+      "price": "od 2 000 zł",
+      "note": "własny sprzęt kupiony w markecie"
+     }
+    ]
+   },
+   {
+    "id": "multi",
+    "title": "Montaż MultiSplit",
+    "subtitle": "Jedna jednostka zewnętrzna obsługująca od 2 do 5 pomieszczeń",
+    "items": [
+     {
+      "name": "Multisplit 2 jednostki wewnętrzne",
+      "price": "od 3 000 zł",
+      "note": "1 agregat zewnętrzny + 2 pokoje"
+     },
+     {
+      "name": "Multisplit 3 jednostki wewnętrzne",
+      "price": "od 4 000 zł",
+      "note": "1 agregat zewnętrzny + 3 pokoje"
+     },
+     {
+      "name": "Multisplit 4 jednostki wewnętrzne",
+      "price": "od 5 000 zł",
+      "note": "1 agregat zewnętrzny + 4 pokoje"
+     },
+     {
+      "name": "Multisplit 5 jednostek wewnętrznych",
+      "price": "od 6 500 zł",
+      "note": "duże domy i biura piętrowe"
+     }
+    ]
+   },
+   {
+    "id": "dodatkowe",
+    "title": "Usługi dodatkowe",
+    "subtitle": "Cena netto za metr bieżący lub punkt montażowy",
+    "items": [
+     {
+      "name": "Dodatkowy metr instalacji freonowej",
+      "price": "150 zł/mb",
+      "note": ""
+     },
+     {
+      "name": "Dodatkowy metr korytka instalacyjnego",
+      "price": "50 zł/mb",
+      "note": ""
+     },
+     {
+      "name": "Dodatkowy przewód elektryczny",
+      "price": "25 zł/mb",
+      "note": ""
+     },
+     {
+      "name": "Wykonanie bruzdy w cegle",
+      "price": "120 zł/mb",
+      "note": ""
+     },
+     {
+      "name": "Wykonanie bruzdy w betonie",
+      "price": "200 zł/mb",
+      "note": ""
+     },
+     {
+      "name": "Przewiert w żelbecie",
+      "price": "od 250 zł",
+      "note": ""
+     },
+     {
+      "name": "Montaż pompki skroplin",
+      "price": "od 550 zł",
+      "note": ""
+     },
+     {
+      "name": "Dodatkowy uchwyt jednostki zewnętrznej",
+      "price": "200 zł",
+      "note": ""
+     },
+     {
+      "name": "Demontaż starej klimatyzacji",
+      "price": "od 400 zł",
+      "note": ""
+     },
+     {
+      "name": "Montaż z wykorzystaniem podnośnika",
+      "price": "wycena indywidualna",
+      "note": ""
+     }
+    ]
+   },
+   {
+    "id": "serwis",
+    "title": "Serwis i czyszczenie",
+    "subtitle": "Dezynfekcja, kontrola szczelności i uzupełnienie czynnika",
+    "items": [
+     {
+      "name": "Przegląd i czyszczenie klimatyzacji Split",
+      "price": "250 zł",
+      "note": ""
+     },
+     {
+      "name": "Gruntowne czyszczenie i odgrzybianie",
+      "price": "400 zł",
+      "note": ""
+     },
+     {
+      "name": "Przegląd Multisplit (2 jednostki)",
+      "price": "450 zł",
+      "note": ""
+     },
+     {
+      "name": "Przegląd Multisplit (3 jednostki)",
+      "price": "550 zł",
+      "note": ""
+     },
+     {
+      "name": "Przegląd Multisplit (4 jednostki)",
+      "price": "650 zł",
+      "note": ""
+     },
+     {
+      "name": "Diagnostyka usterki",
+      "price": "od 200 zł",
+      "note": ""
+     },
+     {
+      "name": "Kontrola szczelności układu",
+      "price": "od 250 zł",
+      "note": ""
+     },
+     {
+      "name": "Uzupełnienie czynnika chłodniczego",
+      "price": "od 350 zł",
+      "note": ""
+     }
+    ]
+   }
+  ]
+ }
+}

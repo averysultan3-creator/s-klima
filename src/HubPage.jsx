@@ -1,11 +1,17 @@
 import React from "react";
 import { Globe, Star, Image as ImageIcon, Phone, Mail, ArrowUpRight, ShieldCheck, Clock, CreditCard } from "lucide-react";
 import { assetPath } from "./utils";
+import { PHONE, EMAIL, GOOGLE_MAPS_URL, FACEBOOK_URL, NIP, REGON } from "./site";
 
-export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) {
-  const phone = "+48 513 666 450";
-  const email = "kontakt@zielonyzajac.pl";
-  const googleMapsUrl = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
+const FacebookIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z" />
+  </svg>
+);
+
+export default function HubPage({ onGoToSite, onGoToRealizacje }) {
+  const phone = PHONE;
+  const email = EMAIL;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-between relative overflow-hidden font-sans selection:bg-emerald-500 selection:text-white">
@@ -77,55 +83,33 @@ export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) 
             <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
 
-          {/* Cennik 2027 Button */}
-          <button
-            onClick={onGoToCennik}
-            className="w-full group p-4 rounded-2xl bg-emerald-700/40 hover:bg-emerald-600 border border-emerald-500/30 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/30 group-hover:bg-white/20 flex items-center justify-center text-emerald-300 group-hover:text-white transition">
-                <span className="font-black text-lg">PLN</span>
-              </div>
-              <div>
-                <div className="font-bold text-base text-white flex items-center gap-2">
-                  Cennik Usług 2027
-                  <span className="text-[10px] bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded font-bold">
-                    Nowy
-                  </span>
-                </div>
-                <div className="text-xs text-slate-300 group-hover:text-emerald-100">
-                  Montaż split od 1600 zł, multisplit i serwis
-                </div>
-              </div>
-            </div>
-            <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </button>
-
-          {/* 2. Opinie Google */}
-          <a
-            href={googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center justify-between text-left shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 cursor-pointer"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 group-hover:bg-white/20 flex items-center justify-center text-amber-400 group-hover:text-white transition">
+          {/* 2. Opinie Google (70%) + Facebook (30%) */}
+          <div className="flex gap-3">
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="basis-[70%] min-w-0 group p-4 rounded-2xl bg-white/10 hover:bg-emerald-600/90 border border-white/15 hover:border-emerald-400 backdrop-blur-md transition-all duration-300 flex items-center gap-3 text-left shadow-lg"
+            >
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 group-hover:bg-white/20 flex items-center justify-center text-amber-400 group-hover:text-white transition flex-shrink-0">
                 <Star className="w-6 h-6 fill-current" />
               </div>
-              <div>
-                <div className="font-bold text-base text-white flex items-center gap-2">
-                  Opinie Google
-                  <span className="text-[11px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">
-                    5.0 ★
-                  </span>
-                </div>
-                <div className="text-xs text-slate-300 group-hover:text-emerald-100">
-                  Zobacz oceny naszych klientów w Google Maps
-                </div>
+              <div className="min-w-0">
+                <div className="font-bold text-base text-white">Opinie Google</div>
+                <div className="text-xs text-amber-300 group-hover:text-emerald-100 font-bold">5.0 ★</div>
               </div>
-            </div>
-            <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
+            </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="basis-[30%] p-4 rounded-2xl bg-[#1877F2]/90 hover:bg-[#1877F2] border border-white/15 transition-all duration-300 flex flex-col items-center justify-center gap-1 shadow-lg"
+            >
+              <FacebookIcon className="w-7 h-7 text-white" />
+              <span className="text-[11px] font-bold text-white">Facebook</span>
+            </a>
+          </div>
 
           {/* 3. Realizacje */}
           <button
@@ -175,8 +159,8 @@ export default function HubPage({ onGoToSite, onGoToRealizacje, onGoToCennik }) 
 
         {/* Footer info */}
         <div className="mt-8 text-center text-[11px] text-slate-400">
-          <div>Zielony Zając Sp. z o.o. • NIP: 1133216745</div>
-          <div className="mt-0.5">Warszawa i województwo mazowieckie</div>
+          <div>Zielony Zając Sp. z o.o. • NIP: {NIP} • REGON: {REGON}</div>
+          <div className="mt-0.5">Warszawa i okolice do 30 km</div>
         </div>
       </div>
     </div>

@@ -30,16 +30,15 @@ import {
   CreditCard,
 } from "lucide-react";
 import HubPage from "./HubPage";
-import RealizacjePage, { projectObjects } from "./RealizacjePage";
+import RealizacjePage from "./RealizacjePage";
 import CennikPage from "./CennikPage";
 import WizytowkaPage from "./WizytowkaPage";
+import BaneryPage from "./BaneryPage";
 import OriginalHeroRoom from "./OriginalHeroRoom";
 import RodoModal from "./RodoModal";
 import { assetPath } from "./utils";
+import { PHONE, EMAIL, GOOGLE_MAPS_URL, FACEBOOK_URL, NIP, REGON, useContent, allPhotos, photoUrl } from "./site";
 
-const PHONE = "+48 513 666 450";
-const EMAIL = "kontakt@zielonyzajac.pl";
-const GOOGLE_MAPS_URL = "https://maps.google.com/?q=Zielony+Zajac+Klimatyzacja+Warszawa";
 
 const BRAND_LOGOS = [
   { name: "Gree", logo: "/brands/gree.svg" },
@@ -112,12 +111,20 @@ const PACKAGES = [
   },
 ];
 
+// Free quote area: Warsaw + 30 km from the centre
 const DISTRICTS = [
-  "Mokotów", "Wola", "Ursynów", "Wilanów", "Bemowo", "Białołęka",
-  "Bielany", "Ochota", "Targówek", "Praga-Południe", "Praga-Północ",
-  "Śródmieście", "Wawer", "Włochy", "Ursus", "Żoliborz", "Rembertów",
-  "Wesoła", "Piaseczno", "Pruszków", "Marki", "Ząbki", "Legionowo"
+  "Warszawa – wszystkie dzielnice", "Piaseczno", "Konstancin-Jeziorna", "Józefów", "Otwock",
+  "Wiązowna", "Sulejówek", "Zielonka", "Ząbki", "Marki", "Kobyłka", "Wołomin",
+  "Radzymin", "Jabłonna", "Legionowo", "Łomianki", "Izabelin", "Stare Babice",
+  "Nieporęt", "Pruszków", "Piastów", "Michałowice", "Raszyn", "Nadarzyn",
+  "Lesznowola", "Halinów", "Błonie", "Brwinów",
 ];
+
+const FacebookIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z" />
+  </svg>
+);
 
 export default function App() {
   const [currentView, setCurrentView] = useState("main"); // 'main', 'hub', 'realizacje'
@@ -128,7 +135,9 @@ export default function App() {
   const [contactSuccess, setContactSuccess] = useState(false);
   const [userPhoneInput, setUserPhoneInput] = useState("");
   const [rodoOpen, setRodoOpen] = useState(false);
-  const [showAllDistricts, setShowAllDistricts] = useState(false);
+  const content = useContent();
+  const galleryPhotos = allPhotos(content);
+  const sectionPrice = (id, i = 0) => content.cennik.sections.find((x) => x.id === id)?.items?.[i]?.price;
 
   const galleryRef = useRef(null);
 
@@ -140,6 +149,7 @@ export default function App() {
       else if (hash === "#/realizacje" || hash === "#realizacje") setCurrentView("realizacje");
       else if (hash === "#/cennik" || hash === "#cennik") setCurrentView("cennik");
       else if (hash === "#/wizytowka" || hash === "#wizytowka") setCurrentView("wizytowka");
+      else if (hash === "#/banery" || hash === "#banery") setCurrentView("banery");
       else setCurrentView("main");
     };
     handleHash();
@@ -153,6 +163,7 @@ export default function App() {
     else if (view === "realizacje") window.location.hash = "/realizacje";
     else if (view === "cennik") window.location.hash = "/cennik";
     else if (view === "wizytowka") window.location.hash = "/wizytowka";
+    else if (view === "banery") window.location.hash = "/banery";
     else {
       window.location.hash = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -186,7 +197,6 @@ export default function App() {
         <HubPage
           onGoToSite={() => navigateTo("main")}
           onGoToRealizacje={() => navigateTo("realizacje")}
-          onGoToCennik={() => navigateTo("cennik")}
         />
       )}
 
@@ -207,8 +217,11 @@ export default function App() {
       {currentView === "wizytowka" && (
         <WizytowkaPage
           onBack={() => navigateTo("main")}
+          onGoToBanery={() => navigateTo("banery")}
         />
       )}
+
+      {currentView === "banery" && <BaneryPage onBack={() => navigateTo("wizytowka")} />}
 
       {currentView === "main" && (
         <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-emerald-500 selection:text-white">
@@ -217,7 +230,7 @@ export default function App() {
             <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Warszawa i Mazowsze • Wolne terminy na bieżący tydzień</span>
+                <span>Warszawa + 30 km • Bezpłatna wycena • Wolne terminy na bieżący tydzień</span>
               </div>
               <div className="flex items-center gap-3 sm:gap-4 text-emerald-200">
                 <span className="hidden sm:inline">Pn–Pt: 8:00–18:00 | Sob: 9:00–15:00</span>
@@ -233,20 +246,15 @@ export default function App() {
 
       {/* Main Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-24 flex items-center justify-between">
-          {/* Authentic Logo */}
-          <div 
-            onClick={() => navigateTo("main")}
-            className="flex items-center cursor-pointer group"
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Mobile: quick call (logo moved into the hero) */}
+          <a
+            href={`tel:${PHONE.replace(/\s+/g, "")}`}
+            className="lg:hidden inline-flex items-center gap-2 text-sm font-black text-emerald-700"
           >
-            <div className="h-20 w-auto flex items-center group-hover:scale-105 transition">
-              <img
-                src={assetPath("/zielony-zajac-logo.jpg")}
-                alt="Zielony Zając"
-                className="h-16 sm:h-20 w-auto object-contain rounded-xl shadow-xs"
-              />
-            </div>
-          </div>
+            <Phone className="w-4 h-4" />
+            {PHONE}
+          </a>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
@@ -343,20 +351,21 @@ export default function App() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Text Column */}
           <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-900 text-xs font-bold uppercase tracking-wider">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              Autoryzowany instalator • Certyfikat F-Gaz
-            </div>
+            <img
+              src={assetPath("/zielony-zajac-logo.jpg")}
+              alt="Zielony Zając"
+              className="h-32 sm:h-44 lg:h-48 w-auto object-contain mx-auto lg:mx-0 lg:-ml-8 mix-blend-multiply"
+            />
 
             <h1 className="text-2xl sm:text-4xl lg:text-[46px] font-black text-slate-900 leading-[1.15] tracking-tight">
-              Montaż i Serwis Klimatyzacji Warszawa
+              Tworzymy dobry klimat
               <span className="block text-emerald-600 mt-1 sm:mt-2">
                 Czysto, Szybko, w 1 Dzień.
               </span>
             </h1>
 
             <p className="text-sm sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Kompleksowy montaż klimatyzacji do mieszkań, domów i lokali. Bezpłatny dobór mocy, bezpyłowe wiercenie diamentowe i gwarancja do 5 lat.
+              Kompleksowy montaż klimatyzacji do mieszkań, domów i lokali. Bezpłatna wycena, bezpyłowe wiercenie diamentowe i gwarancja do 5 lat.
             </p>
 
             {/* Quick Benefits Tags */}
@@ -388,14 +397,14 @@ export default function App() {
                 onClick={() => navigateTo("cennik")}
                 className="w-full sm:w-auto px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm sm:text-base border border-slate-300 shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                Zobacz Cennik 2027
+                Zobacz Cennik
                 <ChevronRight className="w-4 h-4 text-slate-500" />
               </button>
             </div>
           </div>
 
           {/* Right Interactive Cooling Room Component (Desktop only, hidden on mobile for clean UX) */}
-          <div className="hidden lg:block lg:col-span-5 relative">
+          <div className="lg:col-span-5 relative">
             <OriginalHeroRoom />
           </div>
         </div>
@@ -469,7 +478,7 @@ export default function App() {
                 </ul>
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">od 3 490 zł z montażem</span>
+                <span className="text-xs font-bold text-slate-500">montaż od {sectionPrice("split")}</span>
                 <button
                   onClick={() => handleOpenContactModal("Klimatyzacja w Mieszkaniu")}
                   className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
@@ -571,7 +580,7 @@ export default function App() {
                 </ul>
               </div>
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">od 250 zł</span>
+                <span className="text-xs font-bold text-slate-500">od {sectionPrice("serwis")}</span>
                 <button
                   onClick={() => handleOpenContactModal("Serwis i Odgrzybianie klimatyzacji")}
                   className="text-emerald-700 hover:text-emerald-800 font-bold text-xs flex items-center gap-1 cursor-pointer"
@@ -590,10 +599,10 @@ export default function App() {
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs uppercase font-extrabold tracking-wider text-emerald-400">
               <Sparkles className="w-4 h-4" />
-              Nasze Realizacje • Zdjęcia z montaży w Warszawie
+              Nasze realizacje
             </div>
             <h2 className="text-2xl sm:text-3xl font-black mt-1">
-              Zobacz wykonane realizacje z harmonijką ujęć
+              Zdjęcia z naszych montaży
             </h2>
           </div>
 
@@ -618,7 +627,7 @@ export default function App() {
               onClick={() => navigateTo("realizacje")}
               className="ml-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition flex items-center gap-2 whitespace-nowrap cursor-pointer"
             >
-              Wszystkie (80+)
+              Wszystkie ({galleryPhotos.length})
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -630,41 +639,19 @@ export default function App() {
             ref={galleryRef}
             className="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-3"
           >
-            {projectObjects.map((obj) => (
-              <div
-                key={obj.id}
+            {galleryPhotos.slice(0, 16).map((p) => (
+              <button
+                key={p.id}
                 onClick={() => navigateTo("realizacje")}
-                className="group relative w-72 sm:w-80 flex-shrink-0 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700/60 shadow-lg cursor-pointer transform hover:-translate-y-1 transition duration-300"
+                className="relative w-56 sm:w-64 aspect-[3/4] flex-shrink-0 rounded-2xl overflow-hidden bg-slate-800 cursor-pointer group"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-950">
-                  <img
-                    src={obj.photos[0]}
-                    alt={obj.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    loading="lazy"
-                  />
-                  {/* Floating preview thumbnails inside */}
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-slate-950/80 backdrop-blur-md p-1.5 rounded-xl border border-white/10">
-                    <div className="flex gap-1">
-                      {obj.photos.slice(0, 3).map((p, idx) => (
-                        <div key={idx} className="w-6 h-6 rounded-md overflow-hidden border border-white/30">
-                          <img src={p} alt="" className="w-full h-full object-cover" />
-                        </div>
-                      ))}
-                    </div>
-                    <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
-                      <Layers className="w-3 h-3" />
-                      {obj.photos.length} zdjęcia
-                    </span>
-                  </div>
-                </div>
-                <div className="p-3 bg-slate-800/95 flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-200 line-clamp-1">{obj.title}</span>
-                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-0.5 ml-2 flex-shrink-0">
-                    Otwórz <ExternalLink className="w-3 h-3" />
-                  </span>
-                </div>
-              </div>
+                <img
+                  src={photoUrl(p.src)}
+                  alt="Realizacja montażu klimatyzacji"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  loading="lazy"
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -676,11 +663,12 @@ export default function App() {
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="max-w-xl">
               <span className="inline-block px-3.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-                Oficjalny cennik usług 2027
+                Cennik usług
               </span>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-                Przejrzyste Ceny Montażu i Serwisu
+                Ceny Montażu i Serwisu
               </h2>
+              <p className="mt-3 text-sm text-emerald-100 font-semibold">Cennik jedynie poglądowo, każda wycena indywidualnie.</p>
               <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-200">
                 <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Do 3m instalacji w cenie</span>
                 <span>•</span>
@@ -695,7 +683,7 @@ export default function App() {
                 onClick={() => navigateTo("cennik")}
                 className="px-8 py-4 rounded-2xl bg-white text-emerald-950 hover:bg-emerald-50 font-black text-base shadow-xl transition flex items-center justify-center gap-2 cursor-pointer group"
               >
-                <span>Otwórz Pełny Cennik 2027</span>
+                <span>Otwórz Cennik</span>
                 <ArrowRight className="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition" />
               </button>
               <a
@@ -827,42 +815,23 @@ export default function App() {
         </div>
       </section>
 
-      {/* Warsaw Districts SEO Section */}
+      {/* Service area: free quote Warsaw + 30 km */}
       <section id="dzielnice" className="py-16 px-4 bg-slate-50 border-t border-slate-200">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Lokalny montaż w Warszawie
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-3">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Gdzie Realizujemy Usługi Montażu?
           </h2>
-          <p className="mt-2 text-slate-600 text-sm max-w-xl mx-auto">
-            Dojazd na bezpłatną wizję lokalną oraz montaż realizujemy we wszystkich 18 dzielnicach Warszawy oraz okolicznych miejscowościach:
+          <p className="mt-3 text-emerald-700 text-base sm:text-lg font-black">
+            Darmowa wycena: Warszawa + 30 km od centrum
           </p>
-
-          {/* Top 3 most frequent districts initially */}
-          <div className="flex flex-wrap justify-center gap-2.5 mt-8">
-            {(showAllDistricts ? DISTRICTS : DISTRICTS.slice(0, 3)).map((district, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleOpenContactModal(`Dojazd i wycena w dzielnicy: Warszawa ${district}`)}
-                className="px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-xs sm:text-sm font-bold hover:border-emerald-500 hover:text-emerald-700 hover:bg-emerald-50/50 transition shadow-2xs cursor-pointer flex items-center gap-1.5"
-              >
+          <ul className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-2.5 text-left max-w-3xl mx-auto">
+            {DISTRICTS.map((place) => (
+              <li key={place} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                 <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span>Klimatyzacja Warszawa {district}</span>
-              </button>
+                {place}
+              </li>
             ))}
-          </div>
-
-          {/* Expand / Collapse Button */}
-          <div className="mt-5">
-            <button
-              onClick={() => setShowAllDistricts(!showAllDistricts)}
-              className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-slate-200/80 hover:bg-emerald-100 text-slate-700 hover:text-emerald-800 font-bold text-xs transition cursor-pointer"
-            >
-              <span>{showAllDistricts ? "Zwiń listę dzielnic ↑" : "Pokaż pozostałe dzielnice Warszawy i okolice (18+) ↓"}</span>
-            </button>
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -897,6 +866,15 @@ export default function App() {
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
               Zobacz opinie w Google Maps
             </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-7 py-4 rounded-2xl bg-[#1877F2] hover:bg-[#166fe0] text-white font-bold text-base transition flex items-center gap-2"
+            >
+              <FacebookIcon className="w-5 h-5" />
+              Facebook
+            </a>
           </div>
         </div>
       </section>
@@ -910,7 +888,7 @@ export default function App() {
             </div>
             <p className="text-slate-400 leading-relaxed">
               Zielony Zając Sp. z o.o.<br />
-              NIP: 1133216745
+              NIP: {NIP} • REGON: {REGON}
             </p>
           </div>
 
@@ -939,10 +917,11 @@ export default function App() {
           <div>
             <div className="font-bold text-white text-sm mb-3">Szybkie Linki</div>
             <div className="space-y-1.5">
-              <div><button onClick={() => navigateTo("cennik")} className="hover:text-emerald-400 cursor-pointer">Cennik Usług 2027</button></div>
-              <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400 cursor-pointer">Wszystkie Realizacje (80+ zdjęć)</button></div>
-              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Strona QR Hub dla Klienta</button></div>
+              <div><button onClick={() => navigateTo("cennik")} className="hover:text-emerald-400 cursor-pointer">Cennik usług</button></div>
+              <div><button onClick={() => navigateTo("realizacje")} className="hover:text-emerald-400 cursor-pointer">Realizacje</button></div>
+              <div><button onClick={() => navigateTo("hub")} className="hover:text-emerald-400 cursor-pointer">Wizytówka mobilna</button></div>
               <div><a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Opinie Google Maps</a></div>
+              <div><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400">Facebook</a></div>
             </div>
           </div>
         </div>
@@ -1057,7 +1036,7 @@ export default function App() {
       )}
 
       {/* Floating Sticky Call Button (Hidden on Hub and Wizytowka, sleek circle on mobile, pill on desktop) */}
-      {currentView !== "hub" && currentView !== "wizytowka" && (
+      {currentView !== "hub" && currentView !== "wizytowka" && currentView !== "banery" && (
         <div className="fixed bottom-5 right-5 z-40">
           <a
             href={`tel:${PHONE.replace(/\s+/g, "")}`}

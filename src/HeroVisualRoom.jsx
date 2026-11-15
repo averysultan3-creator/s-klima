@@ -150,7 +150,7 @@ export default function HeroVisualRoom() {
         {/* Top Badges */}
         <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/50 shadow-sm text-xs font-bold text-slate-800 flex items-center gap-1.5 z-10">
           <Fan className="w-4 h-4 text-emerald-600 animate-spin" />
-          dobór mocy + montaż + serwis
+          wycena + montaż + serwis
         </div>
 
         <div className="absolute top-3 right-3 bg-emerald-600 text-white px-3 py-1 rounded-xl shadow-md text-[11px] font-bold z-10">

@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel – Zielony Zając</title>
+<style>
+  :root { --g:#15803d; --g2:#0b3d2e; --bg:#f1f5f9; --line:#e2e8f0; --muted:#64748b; --red:#dc2626; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:#0f172a; }
+  button, input, select, textarea { font: inherit; }
+  .hidden { display:none !important; }
+  header { background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  .bar { max-width:1100px; margin:auto; padding:10px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { font-weight:900; color:var(--g2); margin-right:auto; }
+  .tabs { display:flex; gap:6px; }
+  .tab { border:0; background:transparent; padding:9px 14px; border-radius:10px; font-weight:700; color:var(--muted); cursor:pointer; }
+  .tab.on { background:var(--g); color:#fff; }
+  .btn { border:1px solid var(--line); background:#fff; padding:9px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+  .btn:hover { background:#f8fafc; }
+  .btn.pri { background:var(--g); border-color:var(--g); color:#fff; }
+  .btn.pri:hover { background:#166534; }
+  .btn.red { color:var(--red); }
+  .btn:disabled { opacity:.5; cursor:default; }
+  main { max-width:1100px; margin:auto; padding:20px 16px 80px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; }
+  h2 { margin:0 0 4px; font-size:20px; }
+  .muted { color:var(--muted); font-size:14px; }
+  /* login */
+  #login { max-width:360px; margin:12vh auto; }
+  #login input { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:10px; margin-top:6px; margin-bottom:12px; }
+  #login .btn { width:100%; padding:12px; }
+  .err { color:var(--red); font-size:14px; min-height:20px; }
+  /* photos */
+  .cats { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0 16px; }
+  .cat { border:1px solid var(--line); background:#fff; padding:10px 16px; border-radius:12px; font-weight:800; cursor:pointer; }
+  .cat.on { background:var(--g2); color:#fff; border-color:var(--g2); }
+  .drop { display:block; border:2px dashed #94a3b8; border-radius:16px; padding:26px; text-align:center; background:#fff; cursor:pointer; margin-bottom:16px; }
+  .drop.over { border-color:var(--g); background:#f0fdf4; }
+  .drop b { color:var(--g); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; }
+  .ph { background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .ph img { width:100%; aspect-ratio:1; object-fit:cover; display:block; background:#e2e8f0; cursor:zoom-in; }
+  .ph .tools { display:flex; flex-wrap:wrap; gap:4px; padding:6px; align-items:center; }
+  .ph .tools .del { margin-left:auto; }
+  .ph .tools button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:5px 8px; cursor:pointer; font-weight:700; }
+  .ph .tools select { flex:1 1 100%; order:5; min-width:0; border:1px solid var(--line); border-radius:8px; padding:5px; background:#fff; font-size:13px; }
+  .ph .tools .del { color:var(--red); }
+  /* cennik */
+  .sec-head { display:grid; grid-template-columns:1fr; gap:6px; margin-bottom:10px; }
+  .sec-head input { padding:9px 10px; border:1px solid #cbd5e1; border-radius:8px; }
+  .sec-head input.title { font-weight:800; font-size:17px; }
+  table { width:100%; border-collapse:collapse; }
+  td { padding:4px; vertical-align:top; }
+  td input { width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:8px; }
+  td.price input { font-weight:800; color:var(--g); }
+  td.act { white-space:nowrap; width:1%; }
+  td.act button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:6px 8px; cursor:pointer; }
+  th { text-align:left; font-size:12px; color:var(--muted); padding:4px; text-transform:uppercase; }
+  .savebar { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--line); padding:10px 16px; display:flex; justify-content:center; gap:12px; align-items:center; z-index:5; }
+  #toast { position:fixed; top:70px; left:50%; transform:translateX(-50%); background:var(--g2); color:#fff; padding:10px 18px; border-radius:12px; font-weight:700; z-index:20; opacity:0; transition:opacity .2s; pointer-events:none; }
+  #toast.show { opacity:1; }
+  #toast.bad { background:var(--red); }
+  #lightbox { position:fixed; inset:0; background:rgba(0,0,0,.92); display:flex; align-items:center; justify-content:center; z-index:30; }
+  #lightbox img { max-width:94vw; max-height:90vh; }
+  @media (max-width:640px) {
+    td.note { display:none; } th.note { display:none; }
+    .grid { grid-template-columns:repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div id="login" class="card hidden">
+  <h2>Panel administracyjny</h2>
+  <p class="muted">Zielony Zając – zdjęcia i cennik</p>
+  <form id="loginForm">
+    <label>Login<input name="login" autocomplete="username" required></label>
+    <label>Hasło<input name="password" type="password" autocomplete="current-password" required></label>
+    <div class="err" id="loginErr"></div>
+    <button class="btn pri">Zaloguj</button>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="bar">
+      <div class="brand">Zielony Zając • Panel</div>
+      <div class="tabs">
+        <button class="tab on" data-tab="photos">Zdjęcia</button>
+        <button class="tab" data-tab="cennik">Cennik</button>
+        <button class="tab" data-tab="account">Konto</button>
+      </div>
+      <a class="btn" href="__SITE_URL__" target="_blank" rel="noopener">Zobacz stronę ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- PHOTOS -->
+    <section id="tab-photos">
+      <div class="card">
+        <h2>Zdjęcia realizacji</h2>
+        <div class="muted">Wybierz kategorię, dodaj zdjęcia albo usuń niepotrzebne. Zmiany są widoczne na stronie od razu.</div>
+        <div class="cats" id="cats"></div>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/*" multiple hidden>
+          <b>+ Dodaj zdjęcia</b> do kategorii <b id="dropCat"></b><br>
+          <span class="muted">kliknij lub przeciągnij pliki tutaj (można kilka naraz)</span>
+        </label>
+        <div class="muted" id="upStatus"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- CENNIK -->
+    <section id="tab-cennik" class="hidden">
+      <div class="card">
+        <h2>Cennik</h2>
+        <div class="muted">Zmień nazwę lub cenę i kliknij „Zapisz cennik” na dole.</div>
+      </div>
+      <div id="sections"></div>
+      <button class="btn" id="addSection">+ Dodaj sekcję</button>
+      <div style="height:60px"></div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section id="tab-account" class="hidden">
+      <div class="card" style="max-width:420px">
+        <h2>Zmiana hasła</h2>
+        <form id="pwForm">
+          <p><input name="current" type="password" placeholder="Obecne hasło" autocomplete="current-password" required style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px"></p>
+          <p><input name="next" type="password" placeholder="Nowe hasło (min. 8 znaków)" autocomplete="new-password" minlength="8" required style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px"></p>
+          <button class="btn pri">Zmień hasło</button>
+        </form>
+      </div>
+      <button class="btn red" id="logout">Wyloguj</button>
+    </section>
+  </main>
+
+  <div class="savebar hidden" id="saveBar">
+    <span class="muted" id="dirtyNote">Masz niezapisane zmiany w cenniku</span>
+    <button class="btn" id="undo">Cofnij</button>
+    <button class="btn pri" id="saveCennik">Zapisz cennik</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="lightbox" class="hidden"><img alt=""></div>
+
+<script>
+const SITE = "__SITE_URL__";
+const CATS = [
+  { id: "wewnatrz", label: "Wewnątrz" },
+  { id: "zewnatrz", label: "Na zewnątrz" },
+  { id: "bruzdowanie", label: "Bruzdowanie" },
+];
+let content = null, cat = "wewnatrz", draft = null, dirty = false;
+const $ = (s) => document.querySelector(s);
+
+function toast(msg, bad) {
+  const t = $("#toast"); t.textContent = msg; t.className = "show" + (bad ? " bad" : "");
+  clearTimeout(t._h); t._h = setTimeout(() => (t.className = ""), 2600);
+}
+async function api(path, opts = {}) {
+  const r = await fetch(path, { credentials: "same-origin", ...opts });
+  let data = null; try { data = await r.json(); } catch {}
+  if (r.status === 401 && path !== "/api/login") { showLogin(); throw new Error("Zaloguj się ponownie."); }
+  if (!r.ok) throw new Error((data && data.error) || "Błąd " + r.status);
+  return data;
+}
+const src = (s) => s.startsWith("/uploads/") || /^https?:/.test(s) ? s : SITE + s.replace(/^\//, "");
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function showLogin() { $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
+async function start() {
+  const me = await api("/api/me");
+  if (!me.login) return showLogin();
+  content = await (await fetch("/api/content", { cache: "no-store" })).json();
+  $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+  draft = structuredClone(content.cennik); dirty = false;
+  renderPhotos(); renderCennik();
+}
+
+$("#loginForm").onsubmit = async (e) => {
+  e.preventDefault(); $("#loginErr").textContent = "";
+  const f = new FormData(e.target);
+  try {
+    await api("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ login: f.get("login"), password: f.get("password") }) });
+    e.target.reset(); start();
+  } catch (err) { $("#loginErr").textContent = err.message; }
+};
+
+document.querySelectorAll(".tab").forEach((b) => (b.onclick = () => {
+  document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("on", x === b));
+  ["photos", "cennik", "account"].forEach((t) => $("#tab-" + t).classList.toggle("hidden", t !== b.dataset.tab));
+  $("#saveBar").classList.toggle("hidden", !(dirty && b.dataset.tab === "cennik"));
+}));
+
+/* ---------- PHOTOS ---------- */
+function renderPhotos() {
+  $("#cats").innerHTML = CATS.map((c) => `<button class="cat ${c.id === cat ? "on" : ""}" data-c="${c.id}">${c.label} (${content.photos[c.id].length})</button>`).join("");
+  $("#cats").querySelectorAll(".cat").forEach((b) => (b.onclick = () => { cat = b.dataset.c; renderPhotos(); }));
+  $("#dropCat").textContent = CATS.find((c) => c.id === cat).label;
+  const list = content.photos[cat];
+  $("#grid").innerHTML = list.length ? list.map((p, i) => `
+    <div class="ph">
+      <img src="${esc(src(p.src))}" loading="lazy" data-full="${esc(src(p.src))}">
+      <div class="tools">
+        <button title="Przesuń w lewo" data-a="left" data-i="${i}" ${i === 0 ? "disabled" : ""}>←</button>
+        <button title="Przesuń w prawo" data-a="right" data-i="${i}" ${i === list.length - 1 ? "disabled" : ""}>→</button>
+        <select data-a="move" data-i="${i}" title="Przenieś do kategorii">
+          ${CATS.map((c) => `<option value="${c.id}" ${c.id === cat ? "selected" : ""}>${c.label}</option>`).join("")}
+        </select>
+        <button class="del" title="Usuń zdjęcie" data-a="del" data-i="${i}">✕</button>
+      </div>
+    </div>`).join("") : `<p class="muted">Brak zdjęć w tej kategorii.</p>`;
+}
+
+$("#grid").addEventListener("click", async (e) => {
+  const img = e.target.closest("img[data-full]");
+  if (img) { $("#lightbox img").src = img.dataset.full; $("#lightbox").classList.remove("hidden"); return; }
+  const b = e.target.closest("button[data-a]"); if (!b) return;
+  const i = +b.dataset.i, photos = structuredClone(content.photos), list = photos[cat];
+  if (b.dataset.a === "del") {
+    if (!confirm("Usunąć to zdjęcie ze strony?")) return;
+    list.splice(i, 1);
+  } else if (b.dataset.a === "left") [list[i - 1], list[i]] = [list[i], list[i - 1]];
+  else if (b.dataset.a === "right") [list[i + 1], list[i]] = [list[i], list[i + 1]];
+  await savePhotos(photos, b.dataset.a === "del" ? "Zdjęcie usunięte" : "Kolejność zapisana");
+});
+$("#grid").addEventListener("change", async (e) => {
+  const s = e.target.closest("select[data-a=move]"); if (!s || s.value === cat) return;
+  const photos = structuredClone(content.photos);
+  const [p] = photos[cat].splice(+s.dataset.i, 1);
+  photos[s.value].unshift(p);
+  await savePhotos(photos, "Przeniesiono do: " + CATS.find((c) => c.id === s.value).label);
+});
+$("#lightbox").onclick = () => $("#lightbox").classList.add("hidden");
+
+async function savePhotos(photos, msg) {
+  try {
+    content = await api("/api/admin/photos", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(photos) });
+    renderPhotos(); toast(msg);
+  } catch (err) { toast(err.message, true); }
+}
+
+// Resize big phone photos before upload (keeps correct rotation).
+async function shrink(file) {
+  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const max = 2000, k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  return new Promise((r) => c.toBlob(r, "image/jpeg", 0.85));
+}
+async function upload(files) {
+  files = [...files].filter((f) => f.type.startsWith("image/"));
+  if (!files.length) return;
+  let ok = 0;
+  for (const [n, f] of files.entries()) {
+    $("#upStatus").textContent = `Wysyłanie ${n + 1} z ${files.length}…`;
+    try {
+      const blob = await shrink(f);
+      content = await api("/api/admin/photos/" + cat, { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: blob });
+      ok++;
+    } catch (err) { toast(`${f.name}: ${err.message}`, true); }
+  }
+  $("#upStatus").textContent = "";
+  renderPhotos(); if (ok) toast(`Dodano zdjęć: ${ok}`);
+}
+$("#file").onchange = (e) => { upload(e.target.files); e.target.value = ""; };
+const drop = $("#drop");
+drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", (e) => { e.preventDefault(); drop.classList.remove("over"); upload(e.dataTransfer.files); });
+
+/* ---------- CENNIK ---------- */
+function markDirty() { dirty = true; $("#saveBar").classList.remove("hidden"); }
+function renderCennik() {
+  $("#sections").innerHTML = draft.sections.map((s, si) => `
+    <div class="card" data-si="${si}">
+      <div class="sec-head">
+        <input class="title" data-f="title" value="${esc(s.title)}" placeholder="Nazwa sekcji">
+        <input data-f="subtitle" value="${esc(s.subtitle)}" placeholder="Opis pod nazwą (opcjonalnie)">
+      </div>
+      <table>
+        <tr><th>Usługa</th><th>Cena</th><th class="note">Dopisek</th><th></th></tr>
+        ${s.items.map((it, ii) => `
+          <tr data-ii="${ii}">
+            <td><input data-k="name" value="${esc(it.name)}" placeholder="Nazwa usługi"></td>
+            <td class="price" style="width:150px"><input data-k="price" value="${esc(it.price)}" placeholder="np. od 1 600 zł"></td>
+            <td class="note"><input data-k="note" value="${esc(it.note)}" placeholder="(opcjonalnie)"></td>
+            <td class="act">
+              <button data-a="up" title="W górę" ${ii === 0 ? "disabled" : ""}>↑</button>
+              <button data-a="down" title="W dół" ${ii === s.items.length - 1 ? "disabled" : ""}>↓</button>
+              <button data-a="del" title="Usuń wiersz" style="color:#dc2626">✕</button>
+            </td>
+          </tr>`).join("")}
+      </table>
+      <p style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0">
+        <button class="btn" data-a="add">+ Dodaj usługę</button>
+        <button class="btn red" data-a="delsec" style="margin-left:auto">Usuń sekcję</button>
+      </p>
+    </div>`).join("");
+}
+$("#sections").addEventListener("input", (e) => {
+  const card = e.target.closest("[data-si]"); if (!card) return;
+  const s = draft.sections[+card.dataset.si];
+  if (e.target.dataset.f) s[e.target.dataset.f] = e.target.value;
+  const row = e.target.closest("[data-ii]");
+  if (row && e.target.dataset.k) s.items[+row.dataset.ii][e.target.dataset.k] = e.target.value;
+  markDirty();
+});
+$("#sections").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-a]"); if (!b) return;
+  const s = draft.sections[+b.closest("[data-si]").dataset.si];
+  const row = b.closest("[data-ii]"), ii = row ? +row.dataset.ii : -1;
+  if (b.dataset.a === "add") s.items.push({ name: "", price: "", note: "" });
+  if (b.dataset.a === "del") s.items.splice(ii, 1);
+  if (b.dataset.a === "up") [s.items[ii - 1], s.items[ii]] = [s.items[ii], s.items[ii - 1]];
+  if (b.dataset.a === "down") [s.items[ii + 1], s.items[ii]] = [s.items[ii], s.items[ii + 1]];
+  if (b.dataset.a === "delsec") { if (!confirm(`Usunąć całą sekcję „${s.title}”?`)) return; draft.sections.splice(draft.sections.indexOf(s), 1); }
+  markDirty(); renderCennik();
+});
+$("#addSection").onclick = () => { draft.sections.push({ id: "sekcja-" + Date.now().toString(36), title: "Nowa sekcja", subtitle: "", items: [{ name: "", price: "", note: "" }] }); markDirty(); renderCennik(); };
+$("#undo").onclick = () => { draft = structuredClone(content.cennik); dirty = false; $("#saveBar").classList.add("hidden"); renderCennik(); };
+$("#saveCennik").onclick = async () => {
+  const b = $("#saveCennik"); b.disabled = true;
+  try {
+    content = await api("/api/admin/cennik", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(draft) });
+    draft = structuredClone(content.cennik); dirty = false; $("#saveBar").classList.add("hidden"); renderCennik(); toast("Cennik zapisany");
+  } catch (err) { toast(err.message, true); }
+  b.disabled = false;
+};
+window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+/* ---------- ACCOUNT ---------- */
+$("#pwForm").onsubmit = async (e) => {
+  e.preventDefault(); const f = new FormData(e.target);
+  try {
+    await api("/api/admin/password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ current: f.get("current"), next: f.get("next") }) });
+    e.target.reset(); toast("Hasło zmienione");
+  } catch (err) { toast(err.message, true); }
+};
+$("#logout").onclick = async () => { await api("/api/logout", { method: "POST" }).catch(() => {}); showLogin(); };
+
+start().catch((e) => { showLogin(); });
+</script>
+</body>
+</html>
