@@ -4,5 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/s-klima/",
+  // GitHub Pages mirror = /s-klima/, our server (own domain) = VITE_BASE=/
+  base: process.env.VITE_BASE || "/s-klima/",
 });

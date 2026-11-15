@@ -10,6 +10,7 @@ import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
+import zlib from "node:zlib";
 import { fileURLToPath } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -21,7 +22,11 @@ const BACKUPS = path.join(DATA, "backups");
 const CONTENT_FILE = path.join(DATA, "content.json");
 const USERS_FILE = path.join(DATA, "users.json");
 const SEED_FILE = path.join(HERE, "seed-content.json");
-const SITE_URL = (process.env.SITE_URL || "https://averysultan3-creator.github.io/s-klima/").replace(/\/?$/, "/");
+// Built website (vite build with VITE_BASE=/ VITE_API_URL=same-origin). If present, the server
+// hosts the whole site: / = website, /admin = panel, /api = data. Otherwise only panel + API.
+const SITE_DIR = path.resolve(process.env.SITE_DIR || path.join(HERE, "site"));
+const HAS_SITE = fs.existsSync(path.join(SITE_DIR, "index.html"));
+const SITE_URL = (process.env.SITE_URL || (HAS_SITE ? "/" : "https://averysultan3-creator.github.io/s-klima/")).replace(/\/?$/, "/");
 const COOKIE_SECURE = process.env.COOKIE_SECURE === "1";
 const CATEGORIES = ["wewnatrz", "zewnatrz", "bruzdowanie"];
 const MAX_UPLOAD = 12 * 1024 * 1024;
@@ -38,7 +43,7 @@ const readJson = (f, fallback) => {
   }
 };
 async function writeJsonAtomic(file, data) {
-  const tmp = `${file}.${process.pid}.tmp`;
+  const tmp = `${file}.${process.pid}.${crypto.randomBytes(4).toString("hex")}.tmp`;
   await fsp.writeFile(tmp, JSON.stringify(data, null, 1), "utf8");
   await fsp.rename(tmp, file);
 }
@@ -47,14 +52,23 @@ if (!fs.existsSync(CONTENT_FILE)) {
   fs.copyFileSync(SEED_FILE, CONTENT_FILE);
   console.log("content.json created from", SEED_FILE);
 }
+const validContent = (c) => c && c.photos && c.cennik && Array.isArray(c.cennik.sections);
 let content = readJson(CONTENT_FILE, null);
-if (!content) throw new Error(`Cannot read ${CONTENT_FILE}`);
+if (!validContent(content)) {
+  // damaged file (e.g. power loss) -> newest good backup, never a dead site
+  const backups = fs.readdirSync(BACKUPS).filter((f) => f.startsWith("content-")).sort().reverse();
+  content = backups.map((f) => readJson(path.join(BACKUPS, f), null)).find(validContent) || readJson(SEED_FILE, null);
+  console.error(`content.json unreadable - restored from ${validContent(content) ? "backup/seed" : "nothing"}`);
+  if (!validContent(content)) throw new Error(`Cannot read ${CONTENT_FILE}`);
+  fs.renameSync(CONTENT_FILE, path.join(BACKUPS, `damaged-${Date.now()}.json`));
+  fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 1), "utf8");
+}
 
 let saving = Promise.resolve();
 function saveContent(next) {
   next.updatedAt = new Date().toISOString();
   content = next;
-  saving = saving.then(async () => {
+  saving = saving.catch(() => {}).then(async () => {
     const stamp = next.updatedAt.replace(/[:.]/g, "-");
     await writeJsonAtomic(path.join(BACKUPS, `content-${stamp}.json`), next);
     const old = (await fsp.readdir(BACKUPS)).filter((f) => f.startsWith("content-")).sort();
@@ -88,18 +102,30 @@ if (process.argv[2] === "--set-password") {
   process.exit(0);
 }
 
-const sessions = new Map(); // token -> { login, expires }
+// Sessions survive restarts: only sha256(token) is stored on disk, never the token itself.
+const SESSIONS_FILE = path.join(DATA, "sessions.json");
+const tokenHash = (t) => crypto.createHash("sha256").update(t).digest("hex");
+const sessions = new Map(Object.entries(readJson(SESSIONS_FILE, {})).filter(([, s]) => s && s.expires > Date.now()));
+let sessionsTimer = null;
+function persistSessions() {
+  clearTimeout(sessionsTimer);
+  sessionsTimer = setTimeout(() => {
+    for (const [k, v] of sessions) if (v.expires < Date.now()) sessions.delete(k);
+    writeJsonAtomic(SESSIONS_FILE, Object.fromEntries(sessions)).catch((e) => console.error("sessions save", e));
+  }, 200);
+}
 const attempts = new Map(); // ip -> { count, until }
 
 function getSession(req) {
   const m = /(?:^|;\s*)zz_admin=([a-f0-9]{64})/.exec(req.headers.cookie || "");
   if (!m) return null;
-  const s = sessions.get(m[1]);
+  const key = tokenHash(m[1]);
+  const s = sessions.get(key);
   if (!s || s.expires < Date.now()) {
-    sessions.delete(m[1]);
+    if (sessions.delete(key)) persistSessions();
     return null;
   }
-  return { token: m[1], ...s };
+  return { token: key, ...s };
 }
 const cookie = (value, maxAge) =>
   `zz_admin=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${COOKIE_SECURE ? "; Secure" : ""}`;
@@ -172,7 +198,59 @@ function cleanPhotos(input) {
   return out;
 }
 
-const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" };
+const MIME = {
+  ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml",
+  ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".ico": "image/x-icon",
+  ".pdf": "application/pdf", ".woff2": "font/woff2", ".woff": "font/woff", ".webmanifest": "application/manifest+json",
+};
+const COMPRESSIBLE = new Set([".html", ".js", ".css", ".json", ".svg", ".txt", ".xml", ".webmanifest"]);
+const gzCache = new Map(); // file -> { mtime, buf }
+
+// ---------- static website ----------
+async function serveStatic(req, res, p) {
+  let rel;
+  try { rel = decodeURIComponent(p); } catch { return send(res, 400, "Bad request"); }
+  if (rel.endsWith("/")) rel += "index.html";
+  const file = path.resolve(SITE_DIR, "." + path.posix.normalize("/" + rel));
+  if (!file.startsWith(SITE_DIR + path.sep)) return send(res, 404, "Not found");
+  let st = await fsp.stat(file).catch(() => null);
+  if (st && st.isDirectory()) return redirect(res, p + "/");
+  if (!st) {
+    const nf = path.join(SITE_DIR, "404.html");
+    const body = fs.existsSync(nf) ? await fsp.readFile(nf) : "Not found";
+    return send(res, 404, body, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+  }
+  const ext = path.extname(file).toLowerCase();
+  const headers = {
+    "Content-Type": MIME[ext] || "application/octet-stream",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    // hashed build files never change; html must always be fresh; the rest: 1 day
+    "Cache-Control": rel.startsWith("/assets/") ? "public, max-age=31536000, immutable" : ext === ".html" ? "no-cache" : "public, max-age=86400",
+    "Last-Modified": st.mtime.toUTCString(),
+  };
+  if (req.headers["if-modified-since"] && new Date(req.headers["if-modified-since"]) >= new Date(st.mtime.toUTCString())) {
+    res.writeHead(304, headers);
+    return res.end();
+  }
+  if (COMPRESSIBLE.has(ext) && /gzip/.test(req.headers["accept-encoding"] || "")) {
+    let c = gzCache.get(file);
+    if (!c || c.mtime !== st.mtimeMs) {
+      c = { mtime: st.mtimeMs, buf: zlib.gzipSync(await fsp.readFile(file), { level: 9 }) };
+      gzCache.set(file, c);
+    }
+    res.writeHead(200, { ...headers, "Content-Encoding": "gzip", "Vary": "Accept-Encoding", "Content-Length": c.buf.length });
+    return res.end(req.method === "HEAD" ? undefined : c.buf);
+  }
+  res.writeHead(200, { ...headers, "Content-Length": st.size });
+  if (req.method === "HEAD") return res.end();
+  fs.createReadStream(file).on("error", () => res.destroy()).pipe(res);
+}
+function redirect(res, to) {
+  res.writeHead(301, { Location: to });
+  res.end();
+}
 
 // ---------- routes ----------
 async function handle(req, res) {
@@ -202,8 +280,14 @@ async function handle(req, res) {
     return fs.createReadStream(file).pipe(res);
   }
 
+  // Health check for monitoring / pm2 / Cloudflare
+  if (p === "/healthz") {
+    return send(res, 200, { ok: true, site: HAS_SITE, uptime: Math.round(process.uptime()), photos: CATEGORIES.reduce((n, c) => n + content.photos[c].length, 0) }, { "Cache-Control": "no-store" });
+  }
+
   // Admin panel page
-  if ((p === "/" || p === "/admin" || p === "/admin/") && req.method === "GET") {
+  if (p === "/admin") return redirect(res, "/admin/");
+  if (((!HAS_SITE && p === "/") || p === "/admin/") && req.method === "GET") {
     const html = (await fsp.readFile(path.join(HERE, "admin.html"), "utf8")).replaceAll("__SITE_URL__", SITE_URL);
     return send(res, 200, html, {
       "Content-Type": "text/html; charset=utf-8",
@@ -228,11 +312,15 @@ async function handle(req, res) {
     }
     attempts.delete(ip);
     const token = crypto.randomBytes(32).toString("hex");
-    sessions.set(token, { login, expires: Date.now() + SESSION_HOURS * 3600 * 1000 });
+    sessions.set(tokenHash(token), { login, expires: Date.now() + SESSION_HOURS * 3600 * 1000 });
+    persistSessions();
     return send(res, 200, { ok: true, login }, { "Set-Cookie": cookie(token, SESSION_HOURS * 3600) });
   }
 
-  if (!p.startsWith("/api/")) return send(res, 404, "Not found");
+  if (!p.startsWith("/api/")) {
+    if (HAS_SITE && (req.method === "GET" || req.method === "HEAD")) return serveStatic(req, res, p);
+    return send(res, 404, "Not found");
+  }
 
   const session = getSession(req);
   if (p === "/api/me" && req.method === "GET") return send(res, 200, { login: session?.login || null });
@@ -246,6 +334,7 @@ async function handle(req, res) {
 
   if (p === "/api/logout" && req.method === "POST") {
     sessions.delete(session.token);
+    persistSessions();
     return send(res, 200, { ok: true }, { "Set-Cookie": cookie("", 0) });
   }
 
@@ -257,6 +346,7 @@ async function handle(req, res) {
     users[session.login] = hashPassword(next);
     await writeJsonAtomic(USERS_FILE, users);
     for (const [t, s] of sessions) if (s.login === session.login && t !== session.token) sessions.delete(t);
+    persistSessions();
     return send(res, 200, { ok: true });
   }
 
@@ -307,4 +397,8 @@ http
       if (!e.status) console.error(e);
     });
   })
-  .listen(PORT, HOST, () => console.log(`Zielony Zając admin on http://${HOST}:${PORT}  (data: ${DATA})`));
+  .listen(PORT, HOST, () => console.log(`Zielony Zając on http://${HOST}:${PORT}  site: ${HAS_SITE ? SITE_DIR : "-"}  data: ${DATA}`));
+
+// Request errors are caught per request above; anything truly unexpected -> clean exit, pm2 restarts it.
+process.on("unhandledRejection", (e) => console.error("unhandledRejection", e));
+process.on("uncaughtException", (e) => { console.error("uncaughtException", e); process.exit(1); }); // pm2 restarts in <1 s

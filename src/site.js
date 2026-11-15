@@ -19,8 +19,13 @@ export const PHOTO_CATEGORIES = [
   { id: "bruzdowanie", label: "Bruzdowanie" },
 ];
 
-// Admin API (prices + photos). Empty = the site uses the bundled content only.
-export const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+// Admin API (prices + photos).
+//   unset            -> bundled content only
+//   "same-origin"    -> the site is served by our server itself (/api/content)
+//   "https://host"   -> a separate API host (GitHub Pages mirror)
+const RAW_API = import.meta.env.VITE_API_URL || "";
+const API_ENABLED = RAW_API !== "";
+export const API_URL = RAW_API === "same-origin" ? "" : RAW_API.replace(/\/$/, "");
 
 export const photoUrl = (src) => {
   if (!src) return src;
@@ -34,7 +39,7 @@ let pending = null;
 const listeners = new Set();
 
 function loadContent() {
-  if (pending || !API_URL) return;
+  if (pending || !API_ENABLED) return;
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 6000);
   pending = fetch(`${API_URL}/api/content`, { signal: ctrl.signal, cache: "no-store" })

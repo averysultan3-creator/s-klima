@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Gree Pular 3.2 kW">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eafff1"/>
+      <stop offset="1" stop-color="#fff8e6"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0a493b" flood-opacity=".16"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="34" fill="url(#bg)"/>
+  <path d="M500 76c32 36 44 75 34 120" fill="none" stroke="#10a56a" stroke-width="16" stroke-linecap="round" opacity=".16"/>
+  <g filter="url(#shadow)">
+    <rect x="84" y="94" width="472" height="128" rx="28" fill="#fff"/>
+    <path d="M124 134h390" stroke="#edf5f3" stroke-width="16" stroke-linecap="round"/>
+    <path d="M136 178h368" stroke="#0c2e26" stroke-opacity=".2" stroke-width="10" stroke-linecap="round"/>
+    <rect x="442" y="110" width="56" height="18" rx="9" fill="#10a56a" opacity=".2"/>
+  </g>
+  <path d="M172 256c72-38 142-36 214 0" fill="none" stroke="#10a56a" stroke-width="10" stroke-linecap="round" opacity=".28"/>
+  <text x="88" y="288" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900" fill="#0c2e26">Gree</text>
+  <text x="88" y="319" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#05724c">Pular 3.2 kW</text>
+</svg>

@@ -8,11 +8,14 @@ const W = 85;
 const H = 55;
 const GREEN = "#15803d";
 const DARK = "#0b3d2e";
+export const CARD_BLEED = 2; // mm on every side for the print shop ("spad")
 
-export function CardFront() {
+// bleed > 0: the sheet grows by `bleed` mm on each side, content stays where it was relative to the cut line
+// and the green bar runs past the cut line.
+export function CardFront({ bleed = 0 }) {
   return (
-    <div style={{ ...sheetStyle(W, H), padding: "5mm 5mm 4.5mm 4mm" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1.2mm", background: GREEN }} />
+    <div style={{ ...sheetStyle(W + 2 * bleed, H + 2 * bleed), padding: `${5 + bleed}mm ${5 + bleed}mm ${4.5 + bleed}mm ${4 + bleed}mm` }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: `${1.2 + bleed}mm`, background: GREEN }} />
       <div style={{ display: "flex", height: "100%", gap: "3mm" }}>
         {/* Left: big logo + slogan */}
         <div style={{ width: "40mm", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -56,10 +59,10 @@ export function CardFront() {
   );
 }
 
-export function CardBack() {
+export function CardBack({ bleed = 0 }) {
   return (
-    <div style={{ ...sheetStyle(W, H), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "3mm" }}>
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1.2mm", background: GREEN }} />
+    <div style={{ ...sheetStyle(W + 2 * bleed, H + 2 * bleed), padding: `${bleed}mm`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "3mm" }}>
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: `${1.2 + bleed}mm`, background: GREEN }} />
       <QrCode value={QR_URL} style={{ width: "33mm", height: "33mm" }} />
       <div style={{ fontSize: "2.3mm", color: "#334155", fontWeight: 600, textAlign: "center", lineHeight: 1.45 }}>
         <div style={{ fontWeight: 900, color: DARK, fontSize: "2.6mm" }}>Zielony Zając Sp. z o.o.</div>
@@ -70,7 +73,11 @@ export function CardBack() {
 }
 
 export default function WizytowkaPage({ onBack, onGoToBanery }) {
-  const print = () => printSheets({ wmm: W, hmm: H, title: "Wizytowka-Zielony-Zajac" });
+  const [bleed, setBleed] = React.useState(0);
+  const print = (b = 0) => {
+    setBleed(b);
+    setTimeout(() => printSheets({ wmm: W + 2 * b, hmm: H + 2 * b, title: b ? "Wizytowka-Zielony-Zajac-spad-2mm" : "Wizytowka-Zielony-Zajac" }), 100);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-800 font-sans pb-24">
@@ -89,7 +96,7 @@ export default function WizytowkaPage({ onBack, onGoToBanery }) {
               Banery i naklejka
             </button>
             <button
-              onClick={print}
+              onClick={() => print(0)}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white cursor-pointer"
             >
               <Printer className="w-4 h-4" />
@@ -121,7 +128,7 @@ export default function WizytowkaPage({ onBack, onGoToBanery }) {
 
       <div className="max-w-2xl mx-auto mt-12 px-4 flex flex-wrap justify-center gap-3">
         <button
-          onClick={print}
+          onClick={() => print(0)}
           className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center gap-2 cursor-pointer"
         >
           <Printer className="w-4 h-4" />
@@ -135,14 +142,30 @@ export default function WizytowkaPage({ onBack, onGoToBanery }) {
           <Download className="w-4 h-4 text-emerald-600" />
           Pobierz PDF
         </a>
+        <a
+          href={assetPath("/druk/wizytowka-85x55-spad-2mm.pdf")}
+          download
+          className="px-5 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-200 flex items-center gap-2"
+        >
+          <Download className="w-4 h-4 text-emerald-600" />
+          PDF dla drukarni (spad 2 mm)
+        </a>
+        <button
+          data-print-bleed
+          onClick={() => print(CARD_BLEED)}
+          className="hidden"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
-      <p className="text-center text-xs text-slate-400 mt-4">
-        Przy drukowaniu wybierz skalę 100% (bez dopasowania do strony).
+      <p className="text-center text-xs text-slate-400 mt-4 max-w-xl mx-auto">
+        Przy drukowaniu wybierz skalę 100% (bez dopasowania do strony). Drukarnia zwykle prosi o plik ze spadem:
+        85 × 55 mm + 2 mm z każdej strony = 89 × 59 mm, linia cięcia 2 mm od krawędzi.
       </p>
 
       <PrintRoot>
-        <CardFront />
-        <CardBack />
+        <CardFront bleed={bleed} />
+        <CardBack bleed={bleed} />
       </PrintRoot>
     </div>
   );
