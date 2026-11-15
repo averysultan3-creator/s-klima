@@ -3,8 +3,8 @@ import defaultContent from "./data/default-content.json";
 import { assetPath } from "./utils";
 
 // Company data used on every page, banners and the business card.
-export const PHONE = "+48 513 666 450";
-export const PHONE_TEL = "tel:+48513666450";
+export const PHONE = "+48 513 999 450";
+export const PHONE_TEL = "tel:+48513999450";
 export const EMAIL = "kontakt@zielonyzajac.pl";
 export const WEBSITE = "zielonyzajac.pl";
 export const NIP = "1133216745";

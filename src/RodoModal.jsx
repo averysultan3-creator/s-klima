@@ -42,7 +42,7 @@ export default function RodoModal({ isOpen, onClose }) {
             <h4 className="font-extrabold text-slate-900 text-base mb-1">1. Administrator Danych Osobowych</h4>
             <p>
               Administratorem Twoich danych osobowych jest <strong>Zielony Zając Spółka z ograniczoną odpowiedzialnością</strong> z siedzibą w Warszawie, NIP: <strong>1133216745</strong> (dalej: „Administrator”).
-              Kontakt z Administratorem możliwy jest pod adresem e-mail: <a href="mailto:kontakt@zielonyzajac.pl" className="text-emerald-700 font-bold underline">kontakt@zielonyzajac.pl</a> lub telefonicznie: <strong>+48 513 666 450</strong>.
+              Kontakt z Administratorem możliwy jest pod adresem e-mail: <a href="mailto:kontakt@zielonyzajac.pl" className="text-emerald-700 font-bold underline">kontakt@zielonyzajac.pl</a> lub telefonicznie: <strong>+48 513 999 450</strong>.
             </p>
           </section>
 
